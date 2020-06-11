@@ -17,10 +17,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     car.cpp \
-    main.cpp
+    main.cpp \
+    position.cpp
 
 HEADERS += \
-    car.h
+    car.h \
+    position.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
