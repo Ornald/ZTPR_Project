@@ -13,36 +13,41 @@ int main(int argc, char *argv[])
 
     QGraphicsScene *ScreenScene = new QGraphicsScene();
 
-    qDebug()<<ScreenScene->width()<<" "<<ScreenScene->height();
-
     Car *createCar = new Car();
 
-    /*createCar->setRect(0,0,50,100);
-    QRectF rect;
-    rect=createCar->mapToScene(createCar->boundingRect()).boundingRect();
-    QPointF center = rect.center();
-      qreal angle = 20;
-      QTransform t;
-      t.translate(center.x(), center.y());
-      t.rotate(angle);
-      t.translate(-center.x(), -center.y());
-      //createCar->setPos(t.map(createCar->pos()));
-      createCar->setRotation(createCar->rotation() + angle);
-   */
+
 
     ScreenScene->addItem(createCar);
-    createCar->iDirection=0;
+
+    //createCar->iDirection=0;
 
 
     QGraphicsView *MainView = new QGraphicsView(ScreenScene);
 
     MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+
+    QPushButton *TurnButtonRight = new QPushButton(MainView);
+    TurnButtonRight->setGeometry(400,100,100,50);
+    TurnButtonRight->setText("Turn Right");
+    QObject::connect(TurnButtonRight,SIGNAL(clicked()),createCar,SLOT(temp_turn_right()));
+
+    QPushButton *TurnButtonLeft = new QPushButton(MainView);
+    TurnButtonLeft->setGeometry(400,200,100,50);
+    TurnButtonLeft->setText("Turn Left");
+    QObject::connect(TurnButtonLeft,SIGNAL(clicked()),createCar,SLOT(temp_turn_left()));
  /* QPushButton *ExitButton = new QPushButton(MainView);
   ExitButton->setText("Close the Simulation");
    ExitButton->setGeometry(1720,1030,200,50);
    QObject::connect(ExitButton, SIGNAL (clicked()), MainView, SLOT (close()));
 
 */
+
+    MainView->setFixedSize(1200,1024);
+    MainView->setSceneRect(0,0,1200,1024);
+    //MainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //MainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
     MainView->show();
 
 
