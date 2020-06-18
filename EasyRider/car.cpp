@@ -3,13 +3,15 @@
 const int speedValue=2;
 
 
-Car::Car(): QObject(), QGraphicsRectItem()
+Car::Car(): QObject(), QGraphicsPixmapItem()
 {
-    setRect(300,300,iCarHeight,iCarWidth);
 
-    //setRect(100,300,iCarWidth,iCarHeight);
+
+
     Rect= mapToScene(boundingRect()).boundingRect();
     CenterPoint=Rect.center();
+
+    QGraphicsItem::setTransformOriginPoint(50,87.5);
 
     iOrientation=0;
     setRotation(iOrientation);
@@ -17,12 +19,14 @@ Car::Car(): QObject(), QGraphicsRectItem()
 
     iDirection=1;
     iSpeed=2;
-    iMaxSpeed=3;
+    iMaxSpeed=2;
     iHowDrive=1;
-    qDebug()<<rotation();
+
+
     QTimer *MoveTimer = new QTimer(this);
     connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
     MoveTimer->start(50);
+
 }
 
 void Car::slow_down()
@@ -49,10 +53,6 @@ void Car::set_drive_way(int howdrive)
 void Car::move_forward()
 {
 
-    CenterPoint=Rect.center();
-    qDebug()<<Rect.center()<<CenterPoint;
-    qDebug()<<pos();
-
 
     int iAccelerate = iSpeed*speedValue;
     if(iDirection==1)
@@ -64,23 +64,31 @@ void Car::move_forward()
     else if (iDirection==4)
         setPos(x()+iAccelerate,y());
 
-
 }
 
 void Car::move()
 {
-  /*  switch (iHowDrive) {
+   switch (iHowDrive) {
 
     case 1:
+       if (iSpeed<iMaxSpeed)
+           speed_up();
         move_forward();
         break;
     case 2:
         turn();
         break;
+
+    case 3:
+       change_traffic_lane();
+       break;
+   case 4:
+       stop();
+       break;
     }
-    */
-    if(iHowDrive!=0)
-    change_traffic_lane();
+
+
+
 }
 
 void Car::turn()
@@ -96,9 +104,10 @@ void Car::turn()
 
     CenterPoint=Rect.center();
 
+
     turn_Parameters(RotationAngle,NextDirection,MoveX,MoveY);
 
-    setTransformOriginPoint(CenterPoint);
+
 
     setRotation(rotation()+RotationAngle);
 
@@ -109,9 +118,6 @@ void Car::turn()
         iOrientation=rotation();
         iDirection=NextDirection;
 
-
-
-        setTransformOriginPoint(CenterPoint);
 
     }
 
@@ -139,7 +145,7 @@ void Car::turn_Parameters( int &RotationAngle,int &NextDirection,int &MoveX,int 
                 {
                     RotationAngle=10;
                     NextDirection=4;
-                    MoveX=speedValue;
+                    MoveX=speedValue*2;
                     MoveY=-speedValue;
 
                 }
@@ -147,7 +153,7 @@ void Car::turn_Parameters( int &RotationAngle,int &NextDirection,int &MoveX,int 
                 {
                     RotationAngle=-10;
                     NextDirection=3;
-                    MoveX=-speedValue;
+                    MoveX=-speedValue*2;
                     MoveY=-speedValue;
                 }
 
@@ -158,14 +164,14 @@ void Car::turn_Parameters( int &RotationAngle,int &NextDirection,int &MoveX,int 
                 {
                     RotationAngle=10;
                     NextDirection=3;
-                    MoveX=-speedValue;
+                    MoveX=-speedValue*2;
                     MoveY=speedValue;
                 }
                 else
                 {
                     RotationAngle=-10;
                     NextDirection=4;
-                    MoveX=speedValue;
+                    MoveX=speedValue*2;
                     MoveY=speedValue;
                 }
      }
@@ -176,14 +182,14 @@ void Car::turn_Parameters( int &RotationAngle,int &NextDirection,int &MoveX,int 
                     RotationAngle=10;
                     NextDirection=2;
                     MoveX=speedValue;
-                    MoveY=speedValue;
+                    MoveY=speedValue*2;
                 }
               else
                 {
                     RotationAngle=-10;
                     NextDirection=1;
                     MoveX=speedValue*1;
-                    MoveY=-speedValue;
+                    MoveY=-speedValue*2;
                 }
 
       }
@@ -194,41 +200,182 @@ void Car::turn_Parameters( int &RotationAngle,int &NextDirection,int &MoveX,int 
                     RotationAngle=10;
                     NextDirection=1;
                     MoveX=-speedValue;
-                    MoveY=-speedValue;
+                    MoveY=-speedValue*2;
                 }
                 else
                 {
                     RotationAngle=-10;
                     NextDirection=2;
                     MoveX=-speedValue*1;
-                    MoveY=speedValue;
+                    MoveY=speedValue*2;
                 }
 
         }
 
 }
 
+void Car::change_lane_parameters(int &RotationAngle, int &NextDirection, int &MoveX, int &MoveY)
+{
+    switch (iOrientation)
+    {
+    case 0:
+        if (iOnWrongLane==0)
+        {
+        RotationAngle=-10;
+        MoveX=-speedValue;
+
+        }
+        else
+        {
+            RotationAngle=10;
+            MoveX=speedValue;
+        }
+         NextDirection=1;
+         MoveY=-speedValue;
+        break;
+    case 90:
+        if (iOnWrongLane==0)
+        {
+            RotationAngle=-10;
+            MoveY=-speedValue;
+        }
+        else
+        {
+            RotationAngle=10;
+            MoveY=speedValue;
+        }
+        NextDirection=4;
+        MoveX=speedValue;
+        break;
+    case 180:
+        if (iOnWrongLane==0)
+        {
+            RotationAngle=-10;
+            MoveX=speedValue;
+        }
+        else
+        {
+            RotationAngle=10;
+            MoveX=-speedValue;
+        }
+        NextDirection=2;
+        MoveY=speedValue;
+        break;
+    case 270:
+        if (iOnWrongLane==0)
+        {
+            RotationAngle=-10;
+            MoveY=speedValue;
+        }
+        else
+        {
+            RotationAngle=10;
+            MoveY=-speedValue;
+        }
+        NextDirection=3;
+        MoveX=-speedValue;
+        break;
+
+
+    }
+}
+
 void Car::change_traffic_lane()
 {
+
+
+    int RotationAngle;
+    int NextDirection;
+    int MoveX=0;
+    int MoveY=0;
+    change_lane_parameters(RotationAngle,NextDirection,MoveX,MoveY);
+
+    if(abs(rotation())==abs(iOrientation))
+    {iChangeLaneX=pos().x();}
+    if (abs(abs(rotation())-abs(iOrientation))!=30 && iPositionOnNextLane!=1)
+    {
     CenterPoint=Rect.center();
-    setTransformOriginPoint(CenterPoint);
-    setRotation(rotation()-10);
-    setPos(x()+speedValue,y()+speedValue);
+
+    setRotation(rotation()+RotationAngle);
+    setPos(x()+MoveX,y()+MoveY);
+    }
+
+    if(abs(pos().x()-iChangeLaneX)!=(iCarWidth))
+    {
+        setPos(x()+MoveX,y()+MoveY);
+
+    }
+    else
+    {
+        iPositionOnNextLane=1;
+    }
+    if(iPositionOnNextLane==1)
+    {
+
+        if (abs(rotation())!=abs(iOrientation))
+       {
+
+
+
+
+            setRotation(rotation()-RotationAngle);
+            setPos(x()-MoveX,y()+MoveY);
+        }
+        else
+        {
+            if(iOnWrongLane==0)
+                iOnWrongLane=1;
+            else
+                iOnWrongLane=0;
+            iPositionOnNextLane=0;
+            iHowDrive=1;
+            iDirection=NextDirection;
+        }
+    }
+}
+
+void Car::stop()
+{
+    if (iSpeed!=0)
+    {
+    slow_down();
+    move_forward();
+    }
 
 }
 
+void Car::go()
+{
+    iHowDrive=1;
+    speed_up();
+}
 
-void Car::temp_turn_right()
+
+void Car::turn_right()
 {
     iRightOrLeft=1;
     iHowDrive=2;
+
 }
 
-void Car::temp_turn_left()
+void Car::turn_left()
 {
     iRightOrLeft=2;
     iHowDrive=2;
+
 }
+
+void Car::change_lane()
+{
+    iHowDrive=3;
+}
+
+void Car::stop_car()
+{
+    iHowDrive=4;
+}
+
+
 
 
 

@@ -18,13 +18,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     car.cpp \
     main.cpp \
-    position.cpp
+    map.cpp \
+    normalcar.cpp \
+    position.cpp \
+    prioritycar.cpp \
+    tugcar.cpp
 
 HEADERS += \
     car.h \
-    position.h
+    map.h \
+    normalcar.h \
+    position.h \
+    prioritycar.h \
+    tugcar.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Materialy.qrc

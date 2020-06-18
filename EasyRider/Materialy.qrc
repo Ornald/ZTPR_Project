@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/Graphics">
+        <file>carDarkRed.png</file>
+        <file>carBlack.png</file>
+        <file>carAmbulance.png</file>
+        <file>carTow.png</file>
+        <file>carTowWithcarBlack.png</file>
+    </qresource>
+</RCC>
