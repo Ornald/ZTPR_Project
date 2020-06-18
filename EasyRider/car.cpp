@@ -40,9 +40,12 @@ void Car::speed_up()
         iSpeed++;
 }
 
-void Car::change_speed()
+void Car::change_speed(int iSpeedLevel)
 {
-
+    if(iSpeedLevel<=iMaxSpeed)
+    iSpeed=iSpeedLevel;
+    else
+        iSpeed=iMaxSpeed;
 }
 
 void Car::set_drive_way(int howdrive)

@@ -17,7 +17,7 @@ public:
 
     void slow_down();
     void speed_up();
-    void change_speed();
+    void change_speed(int iSpeedLevel);
 
 
     void set_drive_way(int howdrive);
