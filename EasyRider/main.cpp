@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
     QGraphicsScene *ScreenScene = new QGraphicsScene();
 
-     TugCar *createCar = new TugCar();
+     PriorityCar *createCar = new PriorityCar();
 
 
 
