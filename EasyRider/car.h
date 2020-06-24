@@ -18,8 +18,7 @@ public:
     void slow_down();
     void speed_up();
     void change_speed(int iSpeedLevel);
-
-
+    virtual ~Car();
     void set_drive_way(int howdrive);
 
 public slots:
@@ -32,18 +31,17 @@ public slots:
 
 protected:
     int iDirection=1;
-    int iHowDrive;
-    int iSpeed;
-    int iMaxSpeed;
+    int iHowDrive=1;
+    int iSpeed=0;
+    int iMaxSpeed=2;
     bool bRightofWay;
-    int iExitIndex;
     int iRightOrLeft=1;
-    int iBehaviour;
-    int iCarWidth;
-    int iCarHeight;
-    int iOrientation;
+    int iBehaviour=1;
+    int iCarWidth=0;
+    int iCarHeight=0;
+    int iOrientation=0;
     int iPositionOnNextLane=0;
-    int iChangeLaneX;
+    int iChangeLaneX=0;
     int iOnWrongLane=0;
     QRectF Rect;
     QPointF CenterPoint;
@@ -54,6 +52,7 @@ protected:
     void change_lane_parameters(int &RotationAngle,int &NextDirection,int &MoveX,int &MoveY);
     void change_traffic_lane();
     void stop();
+    int choose_direction();
 
 private:
 

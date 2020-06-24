@@ -7,11 +7,12 @@
 class NormalCar: public Car
 {
 public:
-    NormalCar();
+    NormalCar(int _orientation,int _maxspeed);
     void damage_car();
-
+    int get_car_status();
+    ~NormalCar();
 private:
-    int iStatus;
+    int iStatus=1;
 };
 
 #endif // NORMALCAR_H

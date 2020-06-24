@@ -4,10 +4,10 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPushButton>
-#include "car.h"
-#include "prioritycar.h"
-#include "normalcar.h"
-#include "tugcar.h"
+#include "normaldriver.h"
+#include <vector>
+#include "driver.h"
+#include "prioritydriver.h"
 
 
 int main(int argc, char *argv[])
@@ -16,20 +16,20 @@ int main(int argc, char *argv[])
 
     QGraphicsScene *ScreenScene = new QGraphicsScene();
 
-     PriorityCar *createCar = new PriorityCar();
+     //NormalCar *createCar = new NormalCar(270,2);
 
 
 
-    ScreenScene->addItem(createCar);
-
+//std::vector<Driver*> vektus;
+//vektus.push_back(new NormalDriver(0,1,*ScreenScene));
+//vektus.push_back(new NormalDriver(1,1,*ScreenScene));
     //createCar->iDirection=0;
-
 
     QGraphicsView *MainView = new QGraphicsView(ScreenScene);
 
     MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
-
+/*
     QPushButton *TurnButtonRight = new QPushButton(MainView);
     TurnButtonRight->setGeometry(400,100,100,50);
     TurnButtonRight->setText("Turn Right");
@@ -62,20 +62,19 @@ int main(int argc, char *argv[])
     QObject::connect(ChangeButton,SIGNAL(clicked()),createCar,SLOT(change_tow_occupation()));
 
 
- /* QPushButton *ExitButton = new QPushButton(MainView);
+     QPushButton *ExitButton = new QPushButton(MainView);
   ExitButton->setText("Close the Simulation");
    ExitButton->setGeometry(1720,1030,200,50);
    QObject::connect(ExitButton, SIGNAL (clicked()), MainView, SLOT (close()));
 
 */
 
-    MainView->setFixedSize(1200,1024);
-    MainView->setSceneRect(0,0,1200,1024);
+    MainView->setFixedSize(1280,1024);
+    MainView->setSceneRect(0,0,1280,1024);
     //MainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //MainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     MainView->show();
-
 
 
 

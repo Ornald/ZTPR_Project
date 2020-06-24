@@ -1,6 +1,6 @@
 #include "tugcar.h"
 
-TugCar::TugCar()
+TugCar::TugCar(int _orientation,int _maxspeed)
 {
     setPixmap(QPixmap(":/Graphics/carTow.png"));
 
@@ -9,6 +9,24 @@ TugCar::TugCar()
     iCarHeight = pixmap().size().height()*0.2;
 
     setPos(500,500);
+    Rect= mapToScene(boundingRect()).boundingRect();
+    CenterPoint=Rect.center();
+    QGraphicsItem::setTransformOriginPoint(50,87.5);
+    iOrientation=_orientation;
+    setRotation(iOrientation);
+    iDirection=choose_direction();
+    iMaxSpeed=_maxspeed;
+
+
+
+     QTimer *MoveTimer = new QTimer(this);
+     connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
+     MoveTimer->start(50);
+}
+
+TugCar::~TugCar()
+{
+
 }
 
 void TugCar::change_tow_occupation()

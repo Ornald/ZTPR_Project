@@ -17,20 +17,32 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     car.cpp \
+    driver.cpp \
     main.cpp \
     map.cpp \
     normalcar.cpp \
+    normaldriver.cpp \
     position.cpp \
     prioritycar.cpp \
-    tugcar.cpp
+    prioritydriver.cpp \
+    simulation.cpp \
+    simulationproperties.cpp \
+    tugcar.cpp \
+    tugdriver.cpp
 
 HEADERS += \
     car.h \
+    driver.h \
     map.h \
     normalcar.h \
+    normaldriver.h \
     position.h \
     prioritycar.h \
-    tugcar.h
+    prioritydriver.h \
+    simulation.h \
+    simulationproperties.h \
+    tugcar.h \
+    tugdriver.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

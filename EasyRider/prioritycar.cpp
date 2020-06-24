@@ -1,6 +1,6 @@
 #include "prioritycar.h"
 
-PriorityCar::PriorityCar()
+PriorityCar::PriorityCar(int _orientation,int _maxspeed)
 {
     setPixmap(QPixmap(":/Graphics/carAmbulance.png"));
 
@@ -9,12 +9,31 @@ PriorityCar::PriorityCar()
     iCarHeight = pixmap().size().height()*0.2;
     iStatus=1;
     setPos(500,500);
+
+    Rect= mapToScene(boundingRect()).boundingRect();
+    CenterPoint=Rect.center();
+    QGraphicsItem::setTransformOriginPoint(50,87.5);
+    iOrientation=_orientation;
+    setRotation(iOrientation);
+    iDirection=choose_direction();
+    iMaxSpeed=_maxspeed;
+
+
+
+     QTimer *MoveTimer = new QTimer(this);
+     connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
+     MoveTimer->start(50);
 }
 
 void PriorityCar::damage_car()
 {
     iStatus=0;
     iMaxSpeed=0;
+}
+
+PriorityCar::~PriorityCar()
+{
+
 }
 
 void PriorityCar::move()

@@ -8,24 +8,24 @@ Car::Car(): QObject(), QGraphicsPixmapItem()
 
 
 
-    Rect= mapToScene(boundingRect()).boundingRect();
-    CenterPoint=Rect.center();
+//    Rect= mapToScene(boundingRect()).boundingRect();
+//    CenterPoint=Rect.center();
 
-    QGraphicsItem::setTransformOriginPoint(50,87.5);
+//    QGraphicsItem::setTransformOriginPoint(50,87.5);
 
-    iOrientation=0;
-    setRotation(iOrientation);
-
-
-    iDirection=1;
-    iSpeed=2;
-    iMaxSpeed=2;
-    iHowDrive=1;
+//    iOrientation=0;
+//    setRotation(iOrientation);
 
 
-    QTimer *MoveTimer = new QTimer(this);
-    connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
-    MoveTimer->start(50);
+//    iDirection=1;
+//    iSpeed=2;
+//    iMaxSpeed=2;
+//    iHowDrive=1;
+
+
+//    QTimer *MoveTimer = new QTimer(this);
+//    connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
+//    MoveTimer->start(50);
 
 }
 
@@ -46,6 +46,11 @@ void Car::change_speed(int iSpeedLevel)
     iSpeed=iSpeedLevel;
     else
         iSpeed=iMaxSpeed;
+}
+
+Car::~Car()
+{
+
 }
 
 void Car::set_drive_way(int howdrive)
@@ -294,13 +299,14 @@ void Car::change_traffic_lane()
     change_lane_parameters(RotationAngle,NextDirection,MoveX,MoveY);
 
     if(abs(rotation())==abs(iOrientation))
-    {iChangeLaneX=pos().x();}
+    {
+        iChangeLaneX=pos().x();
+    }
     if (abs(abs(rotation())-abs(iOrientation))!=30 && iPositionOnNextLane!=1)
     {
-    CenterPoint=Rect.center();
-
-    setRotation(rotation()+RotationAngle);
-    setPos(x()+MoveX,y()+MoveY);
+        CenterPoint=Rect.center();
+        setRotation(rotation()+RotationAngle);
+        setPos(x()+MoveX,y()+MoveY);
     }
 
     if(abs(pos().x()-iChangeLaneX)!=(iCarWidth))
@@ -344,6 +350,27 @@ void Car::stop()
     slow_down();
     move_forward();
     }
+
+}
+
+int Car::choose_direction()
+{
+    switch (iOrientation)
+    {
+    case 0:
+        return 1;
+        break;
+    case 90:
+        return 4;
+        break;
+    case 180:
+        return 2;
+        break;
+    case 270:
+        return 3;
+        break;
+    }
+    return 0;
 
 }
 

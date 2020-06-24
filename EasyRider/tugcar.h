@@ -8,7 +8,8 @@ class TugCar : public Car
 {
     Q_OBJECT
 public:
-    TugCar();
+    TugCar(int _orientation,int _maxspeed);
+    ~TugCar();
 
 public slots:
     void change_tow_occupation();

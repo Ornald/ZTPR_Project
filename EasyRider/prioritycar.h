@@ -7,8 +7,9 @@
 class PriorityCar :public Car
 {
 public:
-    PriorityCar();
+    PriorityCar(int _orientation,int _maxspeed);
     void damage_car();
+    ~PriorityCar();
 public slots:
     void move();
 private:
