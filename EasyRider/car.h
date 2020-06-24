@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <cmath>
 #include <QGraphicsRectItem>
+#include "position.h"
 
 class Car:public QObject,public QGraphicsPixmapItem
 {
@@ -21,7 +22,6 @@ public:
     virtual ~Car();
     void set_drive_way(int howdrive);
 
-public slots:
     virtual void move();
     void turn_right();
     void turn_left();

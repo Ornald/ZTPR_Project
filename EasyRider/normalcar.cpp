@@ -1,13 +1,12 @@
 #include "normalcar.h"
 
-NormalCar::NormalCar(int _orientation,int _maxspeed)
+NormalCar::NormalCar(int _orientation, int _maxspeed, int _x, int _y)
 {
-    setPixmap(QPixmap(":/Graphics/carBlack.png"));
+    setPixmap(QPixmap(":/Graphics/carDarkRed.png"));
     setScale(0.2);
     iCarWidth = pixmap().size().width()*0.2;
     iCarHeight = pixmap().size().height()*0.2;
-
-    setPos(500,500);
+    setPos(_x,_y);
     Rect= mapToScene(boundingRect()).boundingRect();
     CenterPoint=Rect.center();
     QGraphicsItem::setTransformOriginPoint(50,87.5);
@@ -17,9 +16,9 @@ NormalCar::NormalCar(int _orientation,int _maxspeed)
     iMaxSpeed=_maxspeed;
 
 
-        QTimer *MoveTimer = new QTimer(this);
-        connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
-        MoveTimer->start(50);
+//        QTimer *MoveTimer = new QTimer(this);
+//        connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
+//        MoveTimer->start(50);
 }
 
 void NormalCar::damage_car()

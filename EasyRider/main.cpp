@@ -8,6 +8,9 @@
 #include <vector>
 #include "driver.h"
 #include "prioritydriver.h"
+#include "simulation.h"
+#include <QImage>
+#include <QBrush>
 
 
 int main(int argc, char *argv[])
@@ -15,20 +18,32 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QGraphicsScene *ScreenScene = new QGraphicsScene();
+    ScreenScene->setSceneRect(0,0,1500,960);
+    ScreenScene->setBackgroundBrush(QBrush(QImage(":/Graphics/Board.png")));
 
      //NormalCar *createCar = new NormalCar(270,2);
 
+    Simulation Game(ScreenScene);
 
 
-//std::vector<Driver*> vektus;
-//vektus.push_back(new NormalDriver(0,1,*ScreenScene));
-//vektus.push_back(new NormalDriver(1,1,*ScreenScene));
-    //createCar->iDirection=0;
+
+std::vector<Driver*> vektus;
+vektus.push_back(new NormalDriver(270,1,*ScreenScene));
+
+
 
     QGraphicsView *MainView = new QGraphicsView(ScreenScene);
 
     MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    QPushButton *AddCarButton = new QPushButton(MainView);
+    AddCarButton->setGeometry(400,100,100,50);
+    AddCarButton->setText("Add Car");
+    QObject::connect(AddCarButton,SIGNAL(clicked()),&Game,SLOT(add_car()));
 
+//    QPushButton *MoveCars = new QPushButton(MainView);
+//    MoveCars->setGeometry(400,200,100,50);
+//    MoveCars->setText("Move Cars");
+//    QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(move_cars()));
 /*
     QPushButton *TurnButtonRight = new QPushButton(MainView);
     TurnButtonRight->setGeometry(400,100,100,50);
@@ -69,10 +84,10 @@ int main(int argc, char *argv[])
 
 */
 
-    MainView->setFixedSize(1280,1024);
-    MainView->setSceneRect(0,0,1280,1024);
-    //MainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //MainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    MainView->setFixedSize(1500,960);
+    //MainView->setSceneRect(0,0,1280,960);
+    MainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    MainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     MainView->show();
 

@@ -1,6 +1,6 @@
 #include "tugcar.h"
 
-TugCar::TugCar(int _orientation,int _maxspeed)
+TugCar::TugCar(int _orientation,int _maxspeed,int _x, int _y)
 {
     setPixmap(QPixmap(":/Graphics/carTow.png"));
 
@@ -8,10 +8,10 @@ TugCar::TugCar(int _orientation,int _maxspeed)
     iCarWidth = pixmap().size().width()*0.2;
     iCarHeight = pixmap().size().height()*0.2;
 
-    setPos(500,500);
+    setPos(_x,_y);
     Rect= mapToScene(boundingRect()).boundingRect();
     CenterPoint=Rect.center();
-    QGraphicsItem::setTransformOriginPoint(50,87.5);
+    QGraphicsItem::setTransformOriginPoint(50,137);
     iOrientation=_orientation;
     setRotation(iOrientation);
     iDirection=choose_direction();
@@ -19,9 +19,9 @@ TugCar::TugCar(int _orientation,int _maxspeed)
 
 
 
-     QTimer *MoveTimer = new QTimer(this);
-     connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
-     MoveTimer->start(50);
+//     QTimer *MoveTimer = new QTimer(this);
+//     connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
+//     MoveTimer->start(50);
 }
 
 TugCar::~TugCar()

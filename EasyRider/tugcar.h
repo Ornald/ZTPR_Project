@@ -8,7 +8,7 @@ class TugCar : public Car
 {
     Q_OBJECT
 public:
-    TugCar(int _orientation,int _maxspeed);
+    TugCar(int _orientation,int _maxspeed,int _x, int _y);
     ~TugCar();
 
 public slots:

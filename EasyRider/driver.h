@@ -3,13 +3,14 @@
 
 #include <QGraphicsScene>
 #include <car.h>
+#include "position.h"
 class Driver
 {
 private:
     int iWayTable[5];
     int iExitIndex;
     int iStartIndex;
-    void start_postion();
+    void start_postion(Position _startPosition);
 protected:
     Car *DriverCar;
 
