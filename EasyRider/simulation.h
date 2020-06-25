@@ -12,7 +12,9 @@ class Simulation: public QObject
 private:
     QGraphicsScene *MainScene;
     std::vector<Driver*> vCarVector;
-public:
+    void random_parameters(int &_orientation,int &_maxSpeed,int &_startIndex);
+    int iDriversIDs=0;
+    public:
     Simulation(QGraphicsScene *_Scene);
     ~Simulation();
 public slots:

@@ -7,7 +7,7 @@
 class NormalCar: public Car
 {
 public:
-    NormalCar(int _orientation,int _maxspeed, int _x, int _y);
+    NormalCar(int _orientation,int _maxspeed, Position _startPosition);
     void damage_car();
     int get_car_status();
     ~NormalCar();

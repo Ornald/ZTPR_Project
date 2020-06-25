@@ -28,6 +28,13 @@ public:
     void change_lane();
     void stop_car();
     void go();
+    void set_maxspeed(int _maxSpeed);
+
+
+
+
+
+
 
 protected:
     int iDirection=1;

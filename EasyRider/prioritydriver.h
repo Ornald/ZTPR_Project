@@ -5,7 +5,7 @@
 class PriorityDriver : public Driver
 {
 public:
-    PriorityDriver(int _orientation, int _maxspeed,QGraphicsScene& _scene);
+    PriorityDriver(int _orientation, int _maxspeed, QGraphicsScene& _scene, int _startIndex, int _ID);
     ~PriorityDriver();
 private:
 

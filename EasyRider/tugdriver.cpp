@@ -1,8 +1,11 @@
 #include "tugdriver.h"
 
-TugDriver::TugDriver(int _orientation, int _maxspeed,QGraphicsScene& _scene)
+TugDriver::TugDriver(int _orientation, int _maxspeed,QGraphicsScene& _scene,int _startIndex,int _ID)
 {
-    DriverCar=new TugCar(_orientation,_maxspeed);
+    iDriverID=_ID;
+    set_start_index(_startIndex);
+    Position _startPosition=start_postion();
+    DriverCar=new TugCar(_orientation,_maxspeed,_startPosition);
     _scene.addItem(DriverCar);
 }
 

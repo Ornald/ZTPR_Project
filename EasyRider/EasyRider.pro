@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     car.cpp \
+    crossroad.cpp \
     driver.cpp \
     main.cpp \
     map.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
 
 HEADERS += \
     car.h \
+    crossroad.h \
     driver.h \
     map.h \
     normalcar.h \

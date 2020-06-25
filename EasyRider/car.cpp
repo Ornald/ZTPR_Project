@@ -1,31 +1,11 @@
 #include "car.h"
 
-const int speedValue=2;
+const int speedValue=1;
 
 
 Car::Car(): QObject(), QGraphicsPixmapItem()
 {
 
-
-
-//    Rect= mapToScene(boundingRect()).boundingRect();
-//    CenterPoint=Rect.center();
-
-//    QGraphicsItem::setTransformOriginPoint(50,87.5);
-
-//    iOrientation=0;
-//    setRotation(iOrientation);
-
-
-//    iDirection=1;
-//    iSpeed=2;
-//    iMaxSpeed=2;
-//    iHowDrive=1;
-
-
-//    QTimer *MoveTimer = new QTimer(this);
-//    connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move()));
-//    MoveTimer->start(50);
 
 }
 
@@ -379,6 +359,14 @@ void Car::go()
     iHowDrive=1;
     speed_up();
 }
+
+void Car::set_maxspeed(int _maxSpeed)
+{
+    iMaxSpeed=_maxSpeed;
+}
+
+
+
 
 
 void Car::turn_right()
