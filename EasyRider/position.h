@@ -7,6 +7,7 @@ class Position
 public:
 
     Position(int X,int Y);
+    Position();
 private:
     int iX;
     int iY;

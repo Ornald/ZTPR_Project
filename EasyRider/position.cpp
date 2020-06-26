@@ -8,6 +8,11 @@ Position::Position(int X, int Y)
     iY=Y;
 }
 
+Position::Position()
+{
+
+}
+
 void Position::set_X(int X)
 {
     iX=X;

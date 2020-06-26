@@ -19,6 +19,9 @@ protected:
     int iRoadID;
     int iCrossRoadCnt=0;
     Map DriverMap;
+    Position pCurrentPosition;
+    void set_current_position();
+    void check_crossroad_position(int _diffPosition);
 
 public:
     Driver();
@@ -31,6 +34,10 @@ public:
     Position start_postion();
     void set_start_index(int _startIndex);
     int get_start_index();
+    bool check_if_out_board();
+
+
+
 
 
 

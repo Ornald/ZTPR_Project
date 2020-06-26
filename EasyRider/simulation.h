@@ -5,6 +5,7 @@
 #include <QObject>
 #include "normaldriver.h"
 #include <QGraphicsScene>
+#include "prioritydriver.h"
 
 class Simulation: public QObject
 {
@@ -12,11 +13,13 @@ class Simulation: public QObject
 private:
     QGraphicsScene *MainScene;
     std::vector<Driver*> vCarVector;
-    void random_parameters(int &_orientation,int &_maxSpeed,int &_startIndex);
+    void random_parameters(int &_maxSpeed, int &_startIndex);
     int iDriversIDs=0;
     public:
     Simulation(QGraphicsScene *_Scene);
     ~Simulation();
+    int prepare_car_to_add(int _startPosition);
+    void deleteCars();
 public slots:
     void add_car();
     void move_cars();

@@ -8,13 +8,16 @@ CrossRoad::CrossRoad(int _crossroadID, int _orientation, int _posR, int _posL)
     iPosL=_posL;
 }
 
+CrossRoad::CrossRoad()
+{
+
+}
+
 int CrossRoad::get_cross_position(int _way)
 {
     if (_way==1)
         return iPosR;
-    else if (_way==2)
-        return  iPosL;
-    return 0;
+    return iPosL;
 }
 
 int CrossRoad::get_crossroadID()
@@ -26,3 +29,5 @@ int CrossRoad::get_orientation()
 {
     return iOrientation;
 }
+
+

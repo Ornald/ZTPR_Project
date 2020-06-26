@@ -12,6 +12,7 @@
 #include <QImage>
 #include <QBrush>
 #include "map.h"
+#include "crossroad.h"
 
 
 int main(int argc, char *argv[])
@@ -24,9 +25,11 @@ int main(int argc, char *argv[])
 
      //NormalCar *createCar = new NormalCar(270,2);
 
-   // Simulation Game(ScreenScene);
+    Simulation Game(ScreenScene);
 
     Map mapa;
+
+
 
 //std::vector<Driver*> vektus;
 //vektus.push_back(new NormalDriver(270,1,*ScreenScene));
@@ -35,16 +38,16 @@ int main(int argc, char *argv[])
 
     QGraphicsView *MainView = new QGraphicsView(ScreenScene);
 
-//    MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-//    QPushButton *AddCarButton = new QPushButton(MainView);
-//    AddCarButton->setGeometry(1350,100,100,50);
-//    AddCarButton->setText("Add Car");
-//    QObject::connect(AddCarButton,SIGNAL(clicked()),&Game,SLOT(add_car()));
+    MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    QPushButton *AddCarButton = new QPushButton(MainView);
+    AddCarButton->setGeometry(1350,100,100,50);
+    AddCarButton->setText("Add Car");
+    QObject::connect(AddCarButton,SIGNAL(clicked()),&Game,SLOT(add_car()));
 
-//    QPushButton *MoveCars = new QPushButton(MainView);
-//    MoveCars->setGeometry(1350,200,100,50);
-//    MoveCars->setText("Move Cars");
-//    QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(move_cars()));
+    QPushButton *MoveCars = new QPushButton(MainView);
+    MoveCars->setGeometry(1350,200,100,50);
+    MoveCars->setText("Move Cars");
+    QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(move_cars()));
 /*
     QPushButton *TurnButtonRight = new QPushButton(MainView);
     TurnButtonRight->setGeometry(400,100,100,50);

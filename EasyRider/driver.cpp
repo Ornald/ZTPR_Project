@@ -1,16 +1,58 @@
 #include "driver.h"
 
 
+
 Driver::Driver()
 {
 
     find_way();
+
+
 
 }
 
 Driver::~Driver()
 {
 
+}
+
+void Driver::check_right_to_overtake()
+{
+    qDebug()<<iDriverID;
+}
+void Driver::set_current_position()
+{
+    pCurrentPosition.set_X(DriverCar->pos().x());
+    pCurrentPosition.set_Y(DriverCar->pos().y());
+}
+
+void Driver::check_crossroad_position(int _diffPosition)
+{
+    if (0==_diffPosition)
+    {
+        if(iWayTable[iCrossRoadCnt]==1)
+        {
+            DriverCar->turn_right();
+            iRoadID=DriverMap.next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+            if(iCrossRoadCnt<4)
+              iCrossRoadCnt++;
+
+        }
+        else if (iWayTable[iCrossRoadCnt]==2)
+        {
+            DriverCar->turn_left();
+            iRoadID=DriverMap.next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+            if(iCrossRoadCnt<4)
+              iCrossRoadCnt++;
+
+        }
+        else
+        {   iRoadID=DriverMap.next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+            if(iCrossRoadCnt<4)
+              iCrossRoadCnt++;
+
+        }
+    }
 }
 
 void Driver::find_way()
@@ -21,8 +63,14 @@ void Driver::find_way()
     for (int it=0;it<5;it++)
     {
         iWayTable[it]=rand()%3;
-        qDebug()<<iWayTable[it]<<endl;
+        //iWayTable[it]=0;
+       // qDebug()<<iWayTable[it]<<endl;
     }
+//        iWayTable[0]=2;
+//        iWayTable[1]=2;
+//        iWayTable[2]=1;
+//        iWayTable[3]=0;
+//        iWayTable[4]=0;
 
 
 }
@@ -79,11 +127,22 @@ int Driver::get_start_index()
     return iStartIndex;
 }
 
+bool Driver::check_if_out_board()
+{
+    if(DriverCar->pos().y()>900 || DriverCar->pos().y()<-100 || DriverCar->pos().x()<-70 || DriverCar->pos().x()>1210)
+        return 1;
+    return 0;
+}
+
+
 void Driver::next_move()
 {
-
+    set_current_position();
+  int result =DriverMap.check_if_turn(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation(),pCurrentPosition);
+//  qDebug()<<result<<iRoadID;
+    check_crossroad_position(result);
 
 
  DriverCar->move();
- qDebug()<<DriverCar->pos().y()<<endl;
+ //qDebug()<<DriverCar->pos()<<endl;
 }
