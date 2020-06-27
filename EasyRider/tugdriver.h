@@ -6,7 +6,7 @@
 class TugDriver : public Driver
 {
 public:
-    TugDriver(int _orientation, int _maxspeed, QGraphicsScene& _scene, int _startIndex, int _ID);
+    TugDriver(int _orientation, int _maxspeed, QGraphicsScene& _scene, int _startIndex, int _ID, Map &_map);
     ~TugDriver();
 private:
 

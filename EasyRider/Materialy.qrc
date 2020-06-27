@@ -6,5 +6,8 @@
         <file>carTow.png</file>
         <file>carTowWithcarBlack.png</file>
         <file>Board.png</file>
+        <file>GreenLight.png</file>
+        <file>RedLight.png</file>
+        <file>YellowLight.png</file>
     </qresource>
 </RCC>

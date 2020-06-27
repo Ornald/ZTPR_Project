@@ -6,7 +6,7 @@
 class NormalDriver : public Driver
 {
 public:
-    NormalDriver(int _orientation, int _maxspeed, QGraphicsScene& _scene, int _startIndex, int _ID);
+    NormalDriver(int _orientation, int _maxspeed, QGraphicsScene& _scene, int _startIndex, int _ID, Map & _map);
     ~NormalDriver();
 private:
 

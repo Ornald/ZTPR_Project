@@ -1,7 +1,8 @@
 #include "map.h"
 const int speed=1;
-Map::Map()
+Map::Map(QGraphicsScene & _scene)
 {
+    Scene=&_scene;
 
     int adjustment= 9*speed;
 
@@ -22,19 +23,48 @@ Map::Map()
     load_crossroad(11,0,(pTurnsPositions(6).get_Y()+adjustment),(pTurnsPositions(3).get_Y()+adjustment));
     load_crossroad(11,180,(pTurnsPositions(2).get_Y()-adjustment),(pTurnsPositions(7).get_Y()-adjustment));
 
+
+    load_trafficlight(Position(420,650),0,0,0,100);
+    load_trafficlight(Position(420,540),2,270,8,100);
+    load_trafficlight(Position(310,540),0,180,11,100);
+    load_trafficlight(Position(310,650),2,90,7,100);
+
+    load_trafficlight(Position(870,650),2,0,1,100);
+    load_trafficlight(Position(870,540),0,270,2,100);
+    load_trafficlight(Position(760,540),2,180,9,100);
+    load_trafficlight(Position(760,650),0,90,8,100);
+
+    load_trafficlight(Position(420,310),2,0,11,100);
+    load_trafficlight(Position(420,200),0,270,10,100);
+    load_trafficlight(Position(310,200),2,180,5,100);
+    load_trafficlight(Position(310,310),0,90,6,100);
+
+    load_trafficlight(Position(870,310),0,0,9,100);
+    load_trafficlight(Position(870,200),2,270,3,100);
+    load_trafficlight(Position(760,200),0,180,4,100);
+    load_trafficlight(Position(760,310),2,90,10,100);
+
+    add_traffics_light_to_scene();
+
 }
 
+Map::~Map()
+{
+
+
+
+}
 int Map::check_if_turn(int _way, int _roadID, int _orientation, Position _carPosition)
 {
         std::vector<CrossRoad>::iterator  it= find_crossroad(_roadID,_orientation);
      if(check_if_exit(_roadID,_orientation))
         return 1;
     if(check_if_X_Y(_roadID))
-    {   //qDebug()<<(it->get_cross_position(_way));
+    {
         return (it->get_cross_position(_way))-_carPosition.get_Y();
     }
     else
-    {   //qDebug()<<(it->get_cross_position(_way));
+    {
         return (it->get_cross_position(_way))-_carPosition.get_X();
     }
 
@@ -83,6 +113,37 @@ int Map::next_road_id(int _way, int _roadID, int _orientation)
 
     }
     return parameter;
+}
+
+void Map::change_lights()
+{
+    for(size_t it=0;it<vTrafficLVector.size();it++)
+    {
+        if (vTrafficLVector[it]->get_previous_status()==2)
+        {
+        vTrafficLVector[it]->change_light();
+        vTrafficLVector[it]->set_recent_change(1);
+
+        }
+    }
+    delay(400);
+
+    for(size_t it=0;it<vTrafficLVector.size();it++)
+    {
+        if (vTrafficLVector[it]->get_previous_status()!=2 && vTrafficLVector[it]->get_if_recently_changed()==0)
+        {
+        vTrafficLVector[it]->change_light();
+        vTrafficLVector[it]->set_recent_change(1);
+        }
+
+    }
+
+    for(size_t it=0;it<vTrafficLVector.size();it++)
+    {
+        vTrafficLVector[it]->set_recent_change(0);
+
+    }
+
 }
 
 void Map::load_crossroad(int _crossroadID,int _orientation,int _posR,int _posL)
@@ -175,6 +236,28 @@ bool Map::check_if_exit(int _roadID, int _orientation)
         return 1;
     return 0;
 
+}
+
+void Map::load_trafficlight(Position _position,int _startStatus,int _orientation,int _roadID,int _stopPoint)
+{
+    vTrafficLVector.push_back(new TrafficLight(_position,_startStatus,_orientation,_roadID,_stopPoint));
+}
+
+void Map::add_traffics_light_to_scene()
+{
+    for (auto it:vTrafficLVector)
+    {
+        Scene->addItem(it);
+    }
+}
+
+void Map::delay(int millisecondsToWait)
+{
+    QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
+    while( QTime::currentTime() < dieTime )
+    {
+        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+    }
 }
 
 int Map::check_roadID_condition(int _roadID, int _orientation)

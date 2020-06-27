@@ -18,7 +18,7 @@ protected:
     Car *DriverCar;
     int iRoadID;
     int iCrossRoadCnt=0;
-    Map DriverMap;
+    Map *DriverMap;
     Position pCurrentPosition;
     void set_current_position();
     void check_crossroad_position(int _diffPosition);

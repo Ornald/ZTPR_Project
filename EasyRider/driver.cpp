@@ -33,7 +33,7 @@ void Driver::check_crossroad_position(int _diffPosition)
         if(iWayTable[iCrossRoadCnt]==1)
         {
             DriverCar->turn_right();
-            iRoadID=DriverMap.next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+            iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
             if(iCrossRoadCnt<4)
               iCrossRoadCnt++;
 
@@ -41,13 +41,13 @@ void Driver::check_crossroad_position(int _diffPosition)
         else if (iWayTable[iCrossRoadCnt]==2)
         {
             DriverCar->turn_left();
-            iRoadID=DriverMap.next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+            iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
             if(iCrossRoadCnt<4)
               iCrossRoadCnt++;
 
         }
         else
-        {   iRoadID=DriverMap.next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+        {   iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
             if(iCrossRoadCnt<4)
               iCrossRoadCnt++;
 
@@ -138,7 +138,7 @@ bool Driver::check_if_out_board()
 void Driver::next_move()
 {
     set_current_position();
-  int result =DriverMap.check_if_turn(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation(),pCurrentPosition);
+  int result =DriverMap->check_if_turn(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation(),pCurrentPosition);
 //  qDebug()<<result<<iRoadID;
     check_crossroad_position(result);
 

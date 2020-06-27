@@ -26,8 +26,10 @@ SOURCES += \
     position.cpp \
     prioritycar.cpp \
     prioritydriver.cpp \
+    sensors.cpp \
     simulation.cpp \
     simulationproperties.cpp \
+    trafficlight.cpp \
     tugcar.cpp \
     tugdriver.cpp
 
@@ -41,8 +43,10 @@ HEADERS += \
     position.h \
     prioritycar.h \
     prioritydriver.h \
+    sensors.h \
     simulation.h \
     simulationproperties.h \
+    trafficlight.h \
     tugcar.h \
     tugdriver.h
 

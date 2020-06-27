@@ -1,7 +1,8 @@
 #include "prioritydriver.h"
 
-PriorityDriver::PriorityDriver(int _orientation, int _maxspeed, QGraphicsScene& _scene, int _startIndex,int _ID)
+PriorityDriver::PriorityDriver(int _orientation, int _maxspeed, QGraphicsScene& _scene, int _startIndex, int _ID, Map &_map)
 {
+    DriverMap=&_map;
     iDriverID=_ID;
     set_start_index(_startIndex);
     iRoadID=_startIndex;
@@ -13,4 +14,5 @@ PriorityDriver::PriorityDriver(int _orientation, int _maxspeed, QGraphicsScene& 
 PriorityDriver::~PriorityDriver()
 {
     delete  DriverCar;
+
 }

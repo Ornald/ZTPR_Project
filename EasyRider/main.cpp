@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
     Simulation Game(ScreenScene);
 
-    Map mapa;
+
 
 
 
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     QPushButton *MoveCars = new QPushButton(MainView);
     MoveCars->setGeometry(1350,200,100,50);
     MoveCars->setText("Move Cars");
-    QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(move_cars()));
+    QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(change_trafficlights()));
 /*
     QPushButton *TurnButtonRight = new QPushButton(MainView);
     TurnButtonRight->setGeometry(400,100,100,50);
