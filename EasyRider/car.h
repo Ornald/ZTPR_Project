@@ -29,7 +29,9 @@ public:
     void stop_car();
     void go();
     void set_maxspeed(int _maxSpeed);
-
+    int get_maxspeed();
+    int get_maxdistance();
+    int get_actualspeed();
 
 
 

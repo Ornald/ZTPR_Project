@@ -23,6 +23,8 @@ public:
     int check_if_turn(int _way,int _roadID,int _orientation,Position _carPosition);
     int next_road_id(int _way,int _roadID, int _orientation);
     void change_lights();
+    int check_if_stop_on_lights(Position _position,int _orientation,int _roadID);
+    int check_light_status(int _orientation,int _roadID);
 
 
 
@@ -43,6 +45,8 @@ private:
     void load_trafficlight(Position _position,int _startStatus,int _orientation,int _roadID,int _stopPoint);
     void add_traffics_light_to_scene();
     void delay( int millisecondsToWait );
+
+    TrafficLight *find_trafficlight(int _roadID,int _orientation);
 
     std::vector<Sensors*> vAllCarSensor;
 

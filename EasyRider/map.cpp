@@ -24,25 +24,25 @@ Map::Map(QGraphicsScene & _scene)
     load_crossroad(11,180,(pTurnsPositions(2).get_Y()-adjustment),(pTurnsPositions(7).get_Y()-adjustment));
 
 
-    load_trafficlight(Position(420,650),0,0,0,100);
-    load_trafficlight(Position(420,540),2,270,8,100);
-    load_trafficlight(Position(310,540),0,180,11,100);
-    load_trafficlight(Position(310,650),2,90,7,100);
+    load_trafficlight(Position(420,650),0,0,0,620);
+    load_trafficlight(Position(420,540),2,270,8,430);
+    load_trafficlight(Position(310,540),0,180,11,500);
+    load_trafficlight(Position(310,650),2,90,7,310);
 
-    load_trafficlight(Position(870,650),2,0,1,100);
-    load_trafficlight(Position(870,540),0,270,2,100);
-    load_trafficlight(Position(760,540),2,180,9,100);
-    load_trafficlight(Position(760,650),0,90,8,100);
+    load_trafficlight(Position(870,650),2,0,1,620);
+    load_trafficlight(Position(870,540),0,270,2,870);
+    load_trafficlight(Position(760,540),2,180,9,500);
+    load_trafficlight(Position(760,650),0,90,8,750);
 
-    load_trafficlight(Position(420,310),2,0,11,100);
-    load_trafficlight(Position(420,200),0,270,10,100);
-    load_trafficlight(Position(310,200),2,180,5,100);
-    load_trafficlight(Position(310,310),0,90,6,100);
+    load_trafficlight(Position(420,310),2,0,11,280);
+    load_trafficlight(Position(420,200),0,270,10,430);
+    load_trafficlight(Position(310,200),2,180,5,160);
+    load_trafficlight(Position(310,310),0,90,6,310);
 
-    load_trafficlight(Position(870,310),0,0,9,100);
-    load_trafficlight(Position(870,200),2,270,3,100);
-    load_trafficlight(Position(760,200),0,180,4,100);
-    load_trafficlight(Position(760,310),2,90,10,100);
+    load_trafficlight(Position(870,310),0,0,9,280);
+    load_trafficlight(Position(870,200),2,270,3,870);
+    load_trafficlight(Position(760,200),0,180,4,160);
+    load_trafficlight(Position(760,310),2,90,10,750);
 
     add_traffics_light_to_scene();
 
@@ -51,14 +51,28 @@ Map::Map(QGraphicsScene & _scene)
 Map::~Map()
 {
 
+    for (size_t it=0;it<vTrafficLVector.size();it++)
+    {
+        TrafficLight *TrafficLightToDelete=vTrafficLVector[it];
+        delete TrafficLightToDelete;
+    }
+    vTrafficLVector.clear();
+
+    for (size_t it=0;it<vAllCarSensor.size();it++)
+    {
+        Sensors*SensorToDelete=vAllCarSensor[it];
+        delete SensorToDelete;
+    }
+    vAllCarSensor.clear();
 
 
 }
 int Map::check_if_turn(int _way, int _roadID, int _orientation, Position _carPosition)
 {
         std::vector<CrossRoad>::iterator  it= find_crossroad(_roadID,_orientation);
+
      if(check_if_exit(_roadID,_orientation))
-        return 1;
+        return -1000;
     if(check_if_X_Y(_roadID))
     {
         return (it->get_cross_position(_way))-_carPosition.get_Y();
@@ -150,6 +164,7 @@ void Map::load_crossroad(int _crossroadID,int _orientation,int _posR,int _posL)
 {
     CrossRoad MyCrossroad( _crossroadID, _orientation, _posR, _posL);
     vCrossRoadVector.push_back(MyCrossroad);
+
 }
 
 Position Map::pTurnsPositions(int _index)
@@ -212,8 +227,6 @@ std::vector<CrossRoad>::iterator  Map::find_crossroad(int _roadID, int _orientat
 {
     std::vector<CrossRoad>::iterator it;
     it = std::find(vCrossRoadVector.begin(),vCrossRoadVector.end(),_roadID);
-
-
     return (it+check_roadID_condition(_roadID,_orientation));
 }
 
@@ -259,6 +272,65 @@ void Map::delay(int millisecondsToWait)
         QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
     }
 }
+
+int Map::check_if_stop_on_lights(Position _position, int _orientation, int _roadID)
+{
+
+   TrafficLight* it= find_trafficlight(_roadID,_orientation);
+
+
+   if(check_if_exit(_roadID,_orientation))
+   {
+
+      return -1000;
+   }
+  if(check_if_X_Y(_roadID))
+  {
+      return (it->get_stopPoint())-_position.get_Y();
+  }
+  else
+  {
+      return (it->get_stopPoint())-_position.get_X();
+  }
+
+
+  return 0;
+}
+
+int Map::check_light_status(int _orientation, int _roadID)
+{
+    TrafficLight* it= find_trafficlight(_roadID,_orientation);
+    return it->get_status();
+}
+
+//std::vector<TrafficLight*>::iterator
+TrafficLight* Map::find_trafficlight(int _roadID, int _orientation)
+{
+     TrafficLight *it;
+
+     for (size_t i=0;i<vTrafficLVector.size();i++)
+     {
+         if(vTrafficLVector[i]->get_roadID()==_roadID)
+         {
+             if(1==check_roadID_condition(_roadID,_orientation))
+             {
+
+                it=vTrafficLVector[i-6];
+             }
+            else
+             {
+                it=vTrafficLVector[i];
+             }
+         }
+
+     }
+
+
+     return it;
+
+}
+
+
 
 int Map::check_roadID_condition(int _roadID, int _orientation)
 {

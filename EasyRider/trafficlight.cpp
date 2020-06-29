@@ -46,9 +46,19 @@ int TrafficLight::get_status()
     return iStatus;
 }
 
+int TrafficLight::get_stopPoint()
+{
+    return iStopPoint;
+}
+
 int TrafficLight::get_previous_status()
 {
     return iPreviousStatus;
+}
+
+int TrafficLight::get_roadID()
+{
+    return iRoadID;
 }
 
 bool TrafficLight::get_if_recently_changed()

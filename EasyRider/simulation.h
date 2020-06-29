@@ -22,6 +22,7 @@ private:
     ~Simulation();
     int prepare_car_to_add(int _startPosition);
     void deleteCars();
+    void delay (int _milisecounds);
 public slots:
     void add_car();
     void move_cars();

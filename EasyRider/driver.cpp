@@ -28,6 +28,23 @@ void Driver::set_current_position()
 
 void Driver::check_crossroad_position(int _diffPosition)
 {
+    if(5*iTotalMaxSpeed>=abs(_diffPosition) && 0==iWayTable[iCrossRoadCnt])
+    {   iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+        if(iCrossRoadCnt<4)
+          iCrossRoadCnt++;
+        DriverCar->set_maxspeed(iTotalMaxSpeed);
+
+
+    }
+
+   else if(5*iTotalMaxSpeed>abs(_diffPosition) && -1000!=_diffPosition )
+    {
+
+        DriverCar->set_maxspeed(1);
+
+
+    }
+
     if (0==_diffPosition)
     {
         if(iWayTable[iCrossRoadCnt]==1)
@@ -36,6 +53,7 @@ void Driver::check_crossroad_position(int _diffPosition)
             iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
             if(iCrossRoadCnt<4)
               iCrossRoadCnt++;
+            DriverCar->set_maxspeed(iTotalMaxSpeed);
 
         }
         else if (iWayTable[iCrossRoadCnt]==2)
@@ -44,15 +62,31 @@ void Driver::check_crossroad_position(int _diffPosition)
             iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
             if(iCrossRoadCnt<4)
               iCrossRoadCnt++;
+            DriverCar->set_maxspeed(iTotalMaxSpeed);
 
         }
-        else
-        {   iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
-            if(iCrossRoadCnt<4)
-              iCrossRoadCnt++;
 
-        }
     }
+}
+
+void Driver::check_trafficlights(int _difference, int _lightStatus)
+{
+
+    if (DriverCar->get_maxdistance()*2>=abs(_difference) )
+    {
+
+    if (2==_lightStatus || 1==_lightStatus)
+    {
+        DriverCar->stop_car();
+
+    }
+    if(0==_lightStatus && 0==DriverCar->get_actualspeed())
+    {
+        DriverCar->go();
+
+    }
+    }
+
 }
 
 void Driver::find_way()
@@ -60,17 +94,16 @@ void Driver::find_way()
     //to do normal car
     srand (time(NULL));
 
-    for (int it=0;it<5;it++)
-    {
-        iWayTable[it]=rand()%3;
-        //iWayTable[it]=0;
-       // qDebug()<<iWayTable[it]<<endl;
-    }
-//        iWayTable[0]=2;
-//        iWayTable[1]=2;
-//        iWayTable[2]=1;
-//        iWayTable[3]=0;
-//        iWayTable[4]=0;
+//    for (int it=0;it<5;it++)
+//    {
+//        iWayTable[it]=rand()%3;
+
+//    }
+        iWayTable[0]=1;
+        iWayTable[1]=2;
+        iWayTable[2]=2;
+        iWayTable[3]=2;
+        iWayTable[4]=0;
 
 
 }
@@ -120,6 +153,7 @@ void Driver::set_start_index(int _startIndex)
 {
     iStartIndex=_startIndex;
 
+
 }
 
 int Driver::get_start_index()
@@ -138,11 +172,15 @@ bool Driver::check_if_out_board()
 void Driver::next_move()
 {
     set_current_position();
-  int result =DriverMap->check_if_turn(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation(),pCurrentPosition);
-//  qDebug()<<result<<iRoadID;
-    check_crossroad_position(result);
+  int CrossroadDistance =DriverMap->check_if_turn(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation(),pCurrentPosition);
+  int TrafficLightDistance=DriverMap->check_if_stop_on_lights(pCurrentPosition, DriverCar->rotation(),iRoadID);
+  int TrafficLightStatus=DriverMap->check_light_status(DriverCar->rotation(),iRoadID);
 
+    check_crossroad_position(CrossroadDistance);
 
+    check_trafficlights(TrafficLightDistance,TrafficLightStatus);
+
+   // qDebug()<<iRoadID<<DriverMap->next_road_id(0,iRoadID,DriverCar->rotation());
  DriverCar->move();
  //qDebug()<<DriverCar->pos()<<endl;
 }

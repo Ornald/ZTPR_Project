@@ -13,6 +13,7 @@
 #include <QBrush>
 #include "map.h"
 #include "crossroad.h"
+#include <QSlider>
 
 
 int main(int argc, char *argv[])
@@ -38,16 +39,23 @@ int main(int argc, char *argv[])
 
     QGraphicsView *MainView = new QGraphicsView(ScreenScene);
 
+
     MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     QPushButton *AddCarButton = new QPushButton(MainView);
     AddCarButton->setGeometry(1350,100,100,50);
     AddCarButton->setText("Add Car");
+
     QObject::connect(AddCarButton,SIGNAL(clicked()),&Game,SLOT(add_car()));
 
     QPushButton *MoveCars = new QPushButton(MainView);
     MoveCars->setGeometry(1350,200,100,50);
     MoveCars->setText("Move Cars");
     QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(change_trafficlights()));
+
+    QSlider * TestSlider=new QSlider(Qt::Horizontal,MainView);
+    TestSlider->setGeometry(1350,300,100,50);
+
+
 /*
     QPushButton *TurnButtonRight = new QPushButton(MainView);
     TurnButtonRight->setGeometry(400,100,100,50);

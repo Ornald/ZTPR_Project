@@ -13,9 +13,12 @@ public:
     TrafficLight(Position _position,int _startStatus,int _orientation,int _roadID, int _stopPoint);
     void change_light();
    int get_status();
+   int get_stopPoint();
    int get_previous_status();
+   int get_roadID();
    bool get_if_recently_changed();
    void set_recent_change(int _change);
+   bool operator== (const int & _temp){ return this->iRoadID==_temp;   };
 private:
     void place_trafficlight(Position _position, int _startStatus,int _orientation);
     int iStatus=0;

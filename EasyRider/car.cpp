@@ -61,6 +61,8 @@ void Car::move()
     case 1:
        if (iSpeed<iMaxSpeed)
            speed_up();
+       if (iSpeed>iMaxSpeed)
+           slow_down();
         move_forward();
         break;
     case 2:
@@ -364,6 +366,22 @@ void Car::set_maxspeed(int _maxSpeed)
 {
     iMaxSpeed=_maxSpeed;
 }
+
+int Car::get_maxspeed()
+{
+    return iMaxSpeed;
+}
+
+int Car::get_maxdistance()
+{
+    return iMaxSpeed*speedValue;
+}
+
+int Car::get_actualspeed()
+{
+    return iSpeed*speedValue;
+}
+
 
 
 

@@ -16,19 +16,22 @@ protected:
     int iStartIndex;
     int iDriverID=0;
     Car *DriverCar;
-    int iRoadID;
+    int iRoadID=0;
     int iCrossRoadCnt=0;
+    int iCarType;
+    int iTotalMaxSpeed=0;
+    int iCurrentMaxSpeed=0;
     Map *DriverMap;
     Position pCurrentPosition;
     void set_current_position();
     void check_crossroad_position(int _diffPosition);
+    void check_trafficlights(int _difference, int _lightStatus);
 
 public:
     Driver();
     virtual ~Driver();
     void check_right_of_way();
     void check_right_to_overtake();
-    void check_traffic_light();
     void find_way();
     void next_move();
     Position start_postion();

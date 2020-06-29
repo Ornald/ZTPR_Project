@@ -20,7 +20,7 @@ int CrossRoad::get_cross_position(int _way)
     return iPosL;
 }
 
-int CrossRoad::get_crossroadID()
+int CrossRoad::get_roadID()
 {
     return iCrossroadID;
 }

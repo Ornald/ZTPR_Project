@@ -7,11 +7,12 @@ Simulation::Simulation(QGraphicsScene *_Scene)
 
     MainScene=_Scene;
      mMainMap = new Map(*MainScene);
+
     srand (time(NULL));
 
          QTimer *MoveTimer = new QTimer(this);
          connect(MoveTimer,SIGNAL(timeout()),this,SLOT(move_cars()));
-         MoveTimer->start(10);
+         MoveTimer->start(40);
 //         QTimer *AddTimer = new QTimer(this);
 //         connect(AddTimer,SIGNAL(timeout()),this,SLOT(add_car()));
 //         AddTimer->start(2000);
@@ -81,20 +82,32 @@ void Simulation::deleteCars()
 
 
 }
+
+
+void Simulation::delay(int _milisecounds)
+{
+    QTime dieTime = QTime::currentTime().addMSecs( _milisecounds );
+    while( QTime::currentTime() < dieTime )
+    {
+        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+    }
+}
+
 void Simulation::random_parameters(int &_maxSpeed,int &_startIndex)
 {   _startIndex=rand()%8;
-    _maxSpeed=1;
+    _maxSpeed=4;
 
 }
 
 void Simulation::add_car()
 {
     int _startIndex,_maxSpeed;
-//    _startIndex=4;
-//    _maxSpeed=1;
-    random_parameters(_maxSpeed,_startIndex);
+   _startIndex=6;
+    _maxSpeed=5;
+    //random_parameters(_maxSpeed,_startIndex);
     int _orientation=prepare_car_to_add(_startIndex);
-    int randomCarNumber = rand()%100;
+    //int randomCarNumber = rand()%100;
+    int randomCarNumber = 1;
     if (randomCarNumber>75)
     vCarVector.push_back(new PriorityDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
     else
@@ -116,5 +129,7 @@ void Simulation::move_cars()
 
 void Simulation::change_trafficlights()
 {
+    mMainMap->change_lights();
+    delay(1000);
     mMainMap->change_lights();
 }
