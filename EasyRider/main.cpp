@@ -24,23 +24,12 @@ int main(int argc, char *argv[])
     ScreenScene->setSceneRect(0,0,1500,960);
     ScreenScene->setBackgroundBrush(QBrush(QImage(":/Graphics/Board.png")));
 
-     //NormalCar *createCar = new NormalCar(270,2);
-
-    Simulation Game(ScreenScene);
-
-
-
-
-
-//std::vector<Driver*> vektus;
-//vektus.push_back(new NormalDriver(270,1,*ScreenScene));
-
 
 
     QGraphicsView *MainView = new QGraphicsView(ScreenScene);
+    Simulation Game(ScreenScene,MainView);
 
-
-    MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+//    MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     QPushButton *AddCarButton = new QPushButton(MainView);
     AddCarButton->setGeometry(1350,100,100,50);
     AddCarButton->setText("Add Car");
@@ -48,12 +37,11 @@ int main(int argc, char *argv[])
     QObject::connect(AddCarButton,SIGNAL(clicked()),&Game,SLOT(add_car()));
 
     QPushButton *MoveCars = new QPushButton(MainView);
-    MoveCars->setGeometry(1350,200,100,50);
+    MoveCars->setGeometry(1150,200,100,50);
     MoveCars->setText("Move Cars");
-    QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(change_trafficlights()));
+    QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(move_cars()));
 
-    QSlider * TestSlider=new QSlider(Qt::Horizontal,MainView);
-    TestSlider->setGeometry(1350,300,100,50);
+
 
 
 /*
@@ -97,11 +85,15 @@ int main(int argc, char *argv[])
 */
 
     MainView->setFixedSize(1500,960);
-    //MainView->setSceneRect(0,0,1280,960);
+
     MainView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     MainView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+
     MainView->show();
+
+
+
 
 
 

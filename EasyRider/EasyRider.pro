@@ -23,6 +23,7 @@ SOURCES += \
     map.cpp \
     normalcar.cpp \
     normaldriver.cpp \
+    ownslider.cpp \
     position.cpp \
     prioritycar.cpp \
     prioritydriver.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     map.h \
     normalcar.h \
     normaldriver.h \
+    ownslider.h \
     position.h \
     prioritycar.h \
     prioritydriver.h \

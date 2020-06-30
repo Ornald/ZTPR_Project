@@ -291,7 +291,7 @@ void Car::change_traffic_lane()
         setPos(x()+MoveX,y()+MoveY);
     }
 
-    if(abs(pos().x()-iChangeLaneX)!=(iCarWidth))
+    if(abs(pos().x()-iChangeLaneX)!=(iCarWidth+10))
     {
         setPos(x()+MoveX,y()+MoveY);
 

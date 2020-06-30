@@ -5,6 +5,7 @@
 #include <car.h>
 #include "position.h"
 #include "map.h"
+#include "sensors.h"
 
 class Driver
 {
@@ -12,6 +13,7 @@ private:
 
 
 protected:
+
     int iWayTable[5];
     int iStartIndex;
     int iDriverID=0;
@@ -38,6 +40,7 @@ public:
     void set_start_index(int _startIndex);
     int get_start_index();
     bool check_if_out_board();
+    static int iCarnumber;
 
 
 

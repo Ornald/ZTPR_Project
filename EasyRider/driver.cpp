@@ -1,11 +1,12 @@
 #include "driver.h"
 
 
-
+ int Driver::iCarnumber=0;
 Driver::Driver()
 {
 
     find_way();
+    iCarnumber++;
 
 
 
@@ -13,7 +14,7 @@ Driver::Driver()
 
 Driver::~Driver()
 {
-
+ iCarnumber--;
 }
 
 void Driver::check_right_to_overtake()
@@ -43,6 +44,10 @@ void Driver::check_crossroad_position(int _diffPosition)
         DriverCar->set_maxspeed(1);
 
 
+    }
+    if(-1000==_diffPosition)
+    {
+        DriverCar->set_maxspeed(iTotalMaxSpeed);
     }
 
     if (0==_diffPosition)
@@ -99,7 +104,7 @@ void Driver::find_way()
 //        iWayTable[it]=rand()%3;
 
 //    }
-        iWayTable[0]=1;
+        iWayTable[0]=2;
         iWayTable[1]=2;
         iWayTable[2]=2;
         iWayTable[3]=2;
@@ -180,7 +185,6 @@ void Driver::next_move()
 
     check_trafficlights(TrafficLightDistance,TrafficLightStatus);
 
-   // qDebug()<<iRoadID<<DriverMap->next_road_id(0,iRoadID,DriverCar->rotation());
  DriverCar->move();
  //qDebug()<<DriverCar->pos()<<endl;
 }

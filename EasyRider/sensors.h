@@ -11,8 +11,9 @@ private:
     int iRoadID;
     int iActualSpeed;
     int iCarID;
+    int iCarType;
 public:
-    Sensors();
+    Sensors(Position _carPosition,int _carNectMove,int _roadID,int _actualSpeed,int _carID,int _carType);
     void set_CarPosition(Position _carPosition);
     void set_CarNextMove(int _nextMove);
     void set_RoadID(int _roadID);

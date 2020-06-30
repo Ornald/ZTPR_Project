@@ -1,8 +1,14 @@
 #include "sensors.h"
 
-Sensors::Sensors()
+Sensors::Sensors(Position _carPosition, int _carNectMove, int _roadID, int _actualSpeed, int _carID, int _carType)
 {
 
+    pCarPosition=_carPosition;
+    iCarNextMove=_carNectMove;
+    iRoadID=_roadID;
+    iActualSpeed=_actualSpeed;
+    iCarID=_carID;
+    iCarType=_carType;
 }
 
 void Sensors::set_CarPosition(Position _carPosition)
