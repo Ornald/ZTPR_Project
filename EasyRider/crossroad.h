@@ -19,6 +19,7 @@ private:
     int iPosR;
     int iPosL;
 
+
 };
 
 #endif // CROSSROAD_H

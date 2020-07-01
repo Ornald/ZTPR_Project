@@ -29,6 +29,8 @@ public:
     bool get_start();
     bool get_stop();
     bool get_exit();
+    bool get_bAmbulance();
+    bool get_bDamage();
 
 private slots:
     void change_simulationSpeed(int _value);
@@ -42,6 +44,8 @@ private slots:
     void press_stop();
     void press_pause();
     void press_exit();
+    void checked_ambulance();
+    void checked_destroyed();
 
 private:
     OwnSlider* SimulationSpeed;
@@ -97,7 +101,7 @@ private:
 
     int iSimSpeed=1;
     int iSpwnTime=2000;
-    int iChangeLights=6000;
+    int iChangeLights=10000;
     int iMaxCarNumber=5;
     int iMaxCarSpeed=3;
     int iPrecentageToDamage=1;
@@ -107,8 +111,12 @@ private:
     bool bStop=0;
     bool bExit=0;
 
+    bool bAmbulance=0;
+    bool bDamage=0;
 
 
 };
+
+
 
 #endif // SIMULATIONPROPERTIES_H

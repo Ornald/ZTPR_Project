@@ -27,9 +27,9 @@ Simulation::Simulation(QGraphicsScene *_Scene,QGraphicsView *View)
 //         connect(TrafficLightTimer,SIGNAL(timeout()),this,SLOT(change_trafficlights()));
 //         TrafficLightTimer->setInterval(iChangeLights);
 //         TrafficLightTimer->start();
-//         CheckPropertiesTimer = new QTimer(this);
-//         connect(CheckPropertiesTimer,SIGNAL(timeout()),this,SLOT(check_properties()));
-//         CheckPropertiesTimer->start(40);
+         CheckPropertiesTimer = new QTimer(this);
+         connect(CheckPropertiesTimer,SIGNAL(timeout()),this,SLOT(check_properties()));
+         CheckPropertiesTimer->start(40);
 
 }
 
@@ -172,6 +172,25 @@ void Simulation::check_sliders()
 
 }
 
+void Simulation::check_checkboxes()
+{
+
+    bool tmpAmbulance=Properties->get_bAmbulance();
+    bool tmpDamage=Properties->get_bDamage();
+
+
+    if(tmpAmbulance!=bAmbulance)
+    {
+        bAmbulance=tmpAmbulance;
+    }
+    if(tmpDamage!=bDamage)
+    {
+        bDamage=tmpDamage;
+
+    }
+
+}
+
 void Simulation::close_all()
 {
     delete this;
@@ -199,8 +218,22 @@ void Simulation::delete_all_cars()
 }
 
 void Simulation::random_parameters(int &_maxSpeed,int &_startIndex)
-{   _startIndex=rand()%8;
+{
+    _startIndex=rand()%8;
     _maxSpeed=rand()%iMaxCarSpeed+1;
+//    _startIndex=7;
+//    _maxSpeed=5;
+
+//    if(Driver::iCarnumber==1)
+//    {
+//        _startIndex=5;
+//        _maxSpeed=3;
+//    }
+//    if(Driver::iCarnumber==2)
+//    {
+//        _startIndex=0;
+//        _maxSpeed=3;
+//    }
 
 }
 
@@ -213,19 +246,28 @@ void Simulation::add_car()
 {
     if(bStart)
     {
+        int randomCarNumber;
     if(Driver::iCarnumber<iMaxCarNumber)
     {
     int _startIndex,_maxSpeed;
-   _startIndex=6;
-    _maxSpeed=5;
-    //random_parameters(_maxSpeed,_startIndex);
+
+    random_parameters(_maxSpeed,_startIndex);
     int _orientation=prepare_car_to_add(_startIndex);
-    //int randomCarNumber = rand()%iPrecentageToAmbulance+1;
-    int randomCarNumber=1;
-    if (randomCarNumber>75)
-    vCarVector.push_back(new PriorityDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
+    if(bAmbulance)
+    {
+
+        randomCarNumber = rand()%100+1;
+         qDebug()<<randomCarNumber;
+         if (randomCarNumber>(100-iPrecentageToAmbulance))
+         vCarVector.push_back(new PriorityDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
+         else
+          vCarVector.push_back(new NormalDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
+    }
     else
-     vCarVector.push_back(new NormalDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
+    {
+        vCarVector.push_back(new TugDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
+    }
+
 
     iDriversIDs++;
     }
@@ -262,6 +304,7 @@ void Simulation::check_properties()
 
     check_sliders();
     check_buttons();
+    check_checkboxes();
 }
 
 void Simulation::close_simulation()

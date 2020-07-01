@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
 //    MainView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     QPushButton *AddCarButton = new QPushButton(MainView);
-    AddCarButton->setGeometry(1350,100,100,50);
+    AddCarButton->setGeometry(1150,100,100,50);
     AddCarButton->setText("Add Car");
 
     QObject::connect(AddCarButton,SIGNAL(clicked()),&Game,SLOT(add_car()));
@@ -40,6 +40,11 @@ int main(int argc, char *argv[])
     MoveCars->setGeometry(1150,200,100,50);
     MoveCars->setText("Move Cars");
     QObject::connect(MoveCars,SIGNAL(clicked()),&Game,SLOT(move_cars()));
+
+    QPushButton *Lights = new QPushButton(MainView);
+    Lights->setGeometry(1150,300,100,50);
+    Lights->setText("Change Lights");
+    QObject::connect(Lights,SIGNAL(clicked()),&Game,SLOT(change_trafficlights()));
 
 
 

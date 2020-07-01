@@ -12,18 +12,24 @@ private:
     int iActualSpeed;
     int iCarID;
     int iCarType;
+    int iOrientation;
+    int iMaxSpeed;
 public:
-    Sensors(Position _carPosition,int _carNectMove,int _roadID,int _actualSpeed,int _carID,int _carType);
+    Sensors(Position _carPosition,int _carNectMove,int _roadID,int _actualSpeed,int _carID,int _orientation,int _carType, int _maxSpeed);
     void set_CarPosition(Position _carPosition);
     void set_CarNextMove(int _nextMove);
     void set_RoadID(int _roadID);
     void set_ActualSpeed(int _actualspeed);
     void set_CarID(int _ID);
+    void set_Orientation(int _orientation);
     int get_CarNextMove();
     int get_RoadID();
     int get_ActualSpeed();
     int get_CarID();
+    int get_Orientation();
+    int get_MaxSpeed();
     Position get_CarPosition();
+    bool operator== (int _carID){return this->iCarID==_carID;};
 
 
 };

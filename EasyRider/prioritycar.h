@@ -8,12 +8,12 @@ class PriorityCar :public Car
 {
 public:
     PriorityCar(int _orientation,int _maxspeed,Position _startPosition);
-    void damage_car();
+
     ~PriorityCar();
 public slots:
-    void move();
+//    void move();
 private:
-    int iStatus;
+
     void turn_around();
     void turn_around_parameters();
 

@@ -18,6 +18,7 @@ protected:
     int iStartIndex;
     int iDriverID=0;
     Car *DriverCar;
+    Sensors *sCarSensor;
     int iRoadID=0;
     int iCrossRoadCnt=0;
     int iCarType;
@@ -28,6 +29,7 @@ protected:
     void set_current_position();
     void check_crossroad_position(int _diffPosition);
     void check_trafficlights(int _difference, int _lightStatus);
+    void adjust_speed(int _diff);
 
 public:
     Driver();

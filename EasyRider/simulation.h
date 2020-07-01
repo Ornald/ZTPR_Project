@@ -7,6 +7,7 @@
 #include <QGraphicsScene>
 #include "prioritydriver.h"
 #include "map.h"
+#include "tugdriver.h"
 #include "simulationproperties.h"
 #include <QGraphicsView>
 
@@ -29,7 +30,7 @@ private:
     int iDriversIDs=0;
     int iSimSpeed=1;
     int iSpwnTime=2000;
-    int iChangeLights=6000;
+    int iChangeLights=10000;
     int iMaxCarNumber=5;
     int iMaxCarSpeed=3;
     int iPrecentageToDamage=1;
@@ -38,6 +39,9 @@ private:
     bool bStart=1;
     bool bStop=0;
     bool bExit=0;
+
+    bool bAmbulance=0;
+    bool bDamage=0;
 
     void changeTimer(QTimer *_timerToChange, int _interval);
     public:
@@ -48,6 +52,7 @@ private:
     void delay (int _milisecounds);
     void check_buttons();
     void check_sliders();
+    void check_checkboxes();
     void close_all();
     void stop_simulation();
     void delete_all_cars();

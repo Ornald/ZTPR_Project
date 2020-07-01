@@ -28,14 +28,15 @@ SimulationProperties::SimulationProperties(QGraphicsView *MainView)
     add_checkBoxes(TurnDamage,2,0);
     add_checkBoxes(TurnAmbulance,3,0);
     add_sliders(SimulationSpeed,5,0,1,4,1,"Predkosc Symulacji",SimSpeedTitle,SimSpeedMin,SimSpeedMax);
-    add_sliders(SpawnTime,7,0,2000,5000,200,"Czas do nowego samochodu [ms]",SpwTimTitle,SpwTimeMin,SpwTimeMax);
-    add_sliders(ChangeLightsTime,9,0,4000,8000,200,"Czas na zmiane swiatel [ms]",ChngLigTimTitle,ChngLigTimMin,ChngLigTimMax);
+    add_sliders(SpawnTime,7,0,1000,5000,200,"Czas do nowego samochodu [ms]",SpwTimTitle,SpwTimeMin,SpwTimeMax);
+    add_sliders(ChangeLightsTime,9,0,8000,16000,400,"Czas na zmiane swiatel [ms]",ChngLigTimTitle,ChngLigTimMin,ChngLigTimMax);
     add_sliders(MaxCarsNumber,11,0,5,20,1,"Maksymalna ilosc samochodow",MaxCarNumberTitle,MaxCarNumberMin,MaxCarNumberMax);
     add_sliders(MaxCarsSpeed,13,0,1,5,1,"Maksymalna predkosc samochodu",MaxCarSpeedTitle,MaxCarSpeedMin,MaxCarSpeedMax);
     add_sliders(PrecentageToDamage,15,0,1,10,1,"% szansa na zepsucie samochodu",PrecentageToDamageTitle,PrecentageToDamageMin,PrecentageToDamageMax);
     add_sliders(PrecentageToAmbulance,17,0,1,10,1,"% szansa na pojawienie sie karetki",PrecentageToAmbulanceTitle,PrecentageToAmbulanceMin,PrecentageToAmbulanceMax);
 
-    ChangeLightsTime->setValue(6000);
+    ChangeLightsTime->setValue(iChangeLights);
+    SpawnTime->setValue(iSpwnTime);
     MaxCarsSpeed->setValue(3);
     connect(SimulationSpeed,&OwnSlider::valueChanged,this,&SimulationProperties::change_simulationSpeed);
     connect(SpawnTime,&OwnSlider::valueChanged,this,&SimulationProperties::change_spawnTime);
@@ -49,6 +50,10 @@ SimulationProperties::SimulationProperties(QGraphicsView *MainView)
     connect(StopBtn,SIGNAL(clicked()),this,SLOT(press_stop()));
     connect(PauseBtn,SIGNAL(clicked()),this,SLOT(press_pause()));
     connect(ExitBtn,SIGNAL(clicked()),this,SLOT(press_exit()));
+
+
+    connect(TurnAmbulance,&QCheckBox::stateChanged,this,&SimulationProperties::checked_ambulance);
+    connect(TurnDamage,&QCheckBox::stateChanged,this,&SimulationProperties::checked_destroyed);
 }
 
 SimulationProperties::~SimulationProperties()
@@ -143,6 +148,16 @@ bool SimulationProperties::get_exit()
     return bExit;
 }
 
+bool SimulationProperties::get_bAmbulance()
+{
+    return bAmbulance;
+}
+
+bool SimulationProperties::get_bDamage()
+{
+    return bDamage;
+}
+
 void SimulationProperties::change_simulationSpeed(int _value)
 {
     iSimSpeed=_value;
@@ -204,6 +219,22 @@ void SimulationProperties::press_pause()
 void SimulationProperties::press_exit()
 {
     bExit=1;
+}
+
+void SimulationProperties::checked_ambulance()
+{
+    if(bAmbulance==0)
+        bAmbulance=1;
+    else
+        bAmbulance=0;
+}
+
+void SimulationProperties::checked_destroyed()
+{
+    if(bDamage==0)
+        bDamage=1;
+    else
+        bDamage=0;
 }
 
 void SimulationProperties::add_sliders(OwnSlider *_sliderToAdd, int _row, int _column, int _min, int _max, int _step,QString _title,QLabel *_titleLabel,QLabel *_minLabel,QLabel *_maxLabel)
