@@ -5,7 +5,7 @@
 Driver::Driver()
 {
 
-    find_way();
+
     iCarnumber++;
 
 
@@ -15,12 +15,20 @@ Driver::Driver()
 
 Driver::~Driver()
 {
- iCarnumber--;
+    iCarnumber--;
 }
 
-void Driver::check_right_to_overtake()
+void Driver::overtake()
 {
-    qDebug()<<iDriverID;
+    DriverCar->change_lane();
+}
+
+
+bool Driver::check_if_stuck()
+{
+    if (DriverCar->get_stuck_counter()>=4000 && DriverCar->get_status()==1)
+        return 1;
+    return 0;
 }
 void Driver::set_current_position()
 {
@@ -30,20 +38,10 @@ void Driver::set_current_position()
 
 void Driver::check_crossroad_position(int _diffPosition)
 {
-    if(6*iTotalMaxSpeed>=abs(_diffPosition) && 0==iWayTable[iCrossRoadCnt])
-    {   iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
-
-        if(iCrossRoadCnt<4)
-          iCrossRoadCnt++;
-        sCarSensor->set_CarNextMove(iWayTable[iCrossRoadCnt]);
-        DriverCar->set_maxspeed(iTotalMaxSpeed);
-        sCarSensor->set_RoadID(iRoadID);
 
 
 
-    }
-
-   else if(6*iTotalMaxSpeed>abs(_diffPosition) && -1000!=_diffPosition )
+   if(6*iTotalMaxSpeed>abs(_diffPosition) && -1000!=_diffPosition )
     {
 
         DriverCar->set_maxspeed(1);
@@ -62,6 +60,7 @@ void Driver::check_crossroad_position(int _diffPosition)
         {
             DriverCar->turn_right();
             iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+            sCarSensor->set_RoadID(iRoadID);
             sCarSensor->set_Orientation(DriverMap->get_next_orientation(iWayTable[iCrossRoadCnt],DriverCar->rotation()));
             if(iCrossRoadCnt<4)
               iCrossRoadCnt++;
@@ -69,24 +68,36 @@ void Driver::check_crossroad_position(int _diffPosition)
                 iWayTable[4]=0;
             sCarSensor->set_CarNextMove(iWayTable[iCrossRoadCnt]);
             DriverCar->set_maxspeed(iTotalMaxSpeed);
-            sCarSensor->set_RoadID(iRoadID);
+            DriverCar->reset_stuck_counter();
+
 
 
 
         }
         else if (iWayTable[iCrossRoadCnt]==2)
         {
-            DriverCar->turn_left();
             iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
             sCarSensor->set_Orientation(DriverMap->get_next_orientation(iWayTable[iCrossRoadCnt],DriverCar->rotation()));
+            sCarSensor->set_RoadID(iRoadID);
+            DriverCar->turn_left();
+
             if(iCrossRoadCnt<4)
               iCrossRoadCnt++;
             if(iCrossRoadCnt==4)
                 iWayTable[4]=0;
             sCarSensor->set_CarNextMove(iWayTable[iCrossRoadCnt]);
             DriverCar->set_maxspeed(iTotalMaxSpeed);
-            sCarSensor->set_RoadID(iRoadID);
+            DriverCar->reset_stuck_counter();
 
+        }
+        else if( 0==iWayTable[iCrossRoadCnt] )
+        {   iRoadID=DriverMap->next_road_id(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation());
+            sCarSensor->set_RoadID(iRoadID);
+            if(iCrossRoadCnt<4)
+              iCrossRoadCnt++;
+            sCarSensor->set_CarNextMove(iWayTable[iCrossRoadCnt]);
+            DriverCar->set_maxspeed(iTotalMaxSpeed);
+            DriverCar->reset_stuck_counter();
 
         }
 
@@ -95,7 +106,11 @@ void Driver::check_crossroad_position(int _diffPosition)
 
 void Driver::check_trafficlights(int _difference, int _lightStatus)
 {
-
+    if(0==_lightStatus && DriverCar->get_stuck_counter()>1500 && DriverCar->get_status()==1)
+    {
+        DriverCar->go();
+    }
+    else {
     if (DriverCar->get_maxdistance()*2>=abs(_difference) )
     {
 
@@ -110,14 +125,39 @@ void Driver::check_trafficlights(int _difference, int _lightStatus)
 
     }
     }
+    }
 
 }
 
 void Driver::adjust_speed(int _diff)
 {
-    int distance =DriverMap->distance_to_next_car(iDriverID);
+    int distance =DriverMap->distance_to_next_car(iDriverID,0);
 
-    if(distance<60 && distance >0)
+
+    if (DriverCar->get_position_onLane()==1)
+    {
+        if (DriverMap->check_if_can_return(iDriverID,iNextBrokenCarID))
+       {
+
+            overtake();
+
+
+        }
+    }
+
+    if (distance<60 && distance>0)
+    {
+        if (DriverCar->get_position_onLane()==0)
+        {
+
+            if(DriverMap->check_if_can_overtake(iDriverID,iNextBrokenCarID))
+            {
+            overtake();
+            }
+        }
+    }
+
+    if(distance<50 && distance >0)
     {
 
         if (DriverMap->get_next_car_speed(iDriverID)<=iTotalMaxSpeed)
@@ -138,36 +178,6 @@ void Driver::adjust_speed(int _diff)
 
 void Driver::find_way()
 {
-    //to do normal car
-    srand (time(NULL));
-
-    for (int it=0;it<5;it++)
-    {
-        iWayTable[it]=rand()%3;
-
-    }
-//        iWayTable[0]=0;
-//        iWayTable[1]=0;
-//        iWayTable[2]=0;
-//        iWayTable[3]=1;
-//        iWayTable[4]=1;
-//        if(iCarnumber==1)
-//        {
-//            iWayTable[0]=0;
-//            iWayTable[1]=2;
-//            iWayTable[2]=0;
-//            iWayTable[3]=2;
-//            iWayTable[4]=0;
-//        }
-//        if(iCarnumber==2)
-//        {
-//            iWayTable[0]=0;
-//            iWayTable[1]=2;
-//            iWayTable[2]=0;
-//            iWayTable[3]=2;
-//            iWayTable[4]=0;
-//        }
-//qDebug()<<iWayTable[0]<<iWayTable[1]<<iWayTable[2]<<iWayTable[3]<<iWayTable[4];
 
 }
 Position Driver::start_postion()
@@ -231,29 +241,53 @@ bool Driver::check_if_out_board()
     return 0;
 }
 
+int Driver::get_roadID()
+{
+    return iRoadID;
+}
+
+int Driver::get_DriverID()
+{
+    return iDriverID;
+}
+
+void Driver::set_TowCarID(int _towCarID)
+{
+    iTowCarID=_towCarID;
+}
+
+void Driver::set_picked()
+{
+    if(DriverCar->get_status()==0 && DriverMap->check_if_close_to_target(iDriverID,iTowCarID))
+    {
+        iPicked=1;
+
+    }
+
+}
+
+int Driver::get_picked()
+{
+    return iPicked;
+}
+
+bool Driver::can_be_damaged()
+{
+    return 0;
+}
+
+void Driver::engine_malfunction()
+{
+
+}
+
+int Driver::picked_up_id()
+{
+    return -1;
+}
+
 
 void Driver::next_move()
 {
-    set_current_position();
-    sCarSensor->set_CarPosition(pCurrentPosition);
-    sCarSensor->set_ActualSpeed(DriverCar->get_actualspeed());
 
-  int CrossroadDistance =DriverMap->check_if_turn(iWayTable[iCrossRoadCnt],iRoadID,DriverCar->rotation(),pCurrentPosition);
-  int TrafficLightDistance=DriverMap->check_if_stop_on_lights(pCurrentPosition, DriverCar->rotation(),iRoadID);
-  int TrafficLightStatus=DriverMap->check_light_status(DriverCar->rotation(),iRoadID);
-
-    adjust_speed(CrossroadDistance);
-    check_crossroad_position(CrossroadDistance);
-    adjust_speed(CrossroadDistance);
-    check_trafficlights(TrafficLightDistance,TrafficLightStatus);
-
-    //if(iDriverID==0)
-   // qDebug()<<
-
-    //qDebug()<<iDriverID<<DriverMap->distance_to_next_car(iDriverID)<<DriverMap->get_next_car_speed(iDriverID);
-
-//    if(iDriverID==0)
-
-     DriverCar->move();
- //qDebug()<<DriverCar->pos()<<endl;
 }

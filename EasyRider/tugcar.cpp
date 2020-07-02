@@ -30,12 +30,8 @@ void TugCar::change_tow_occupation()
 {
     if (iOccupation==0)
     {
-        setPixmap(QPixmap(":/Graphics/carTowWithcarBlack.png"));
+        setPixmap(QPixmap(":/Graphics/carTowWithcar.png"));
         iOccupation=1;
     }
-    else
-    {
-        setPixmap(QPixmap(":/Graphics/carTow.png"));
-        iOccupation=0;
-    }
+
 }

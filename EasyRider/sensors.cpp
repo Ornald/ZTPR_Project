@@ -42,6 +42,11 @@ void Sensors::set_Orientation(int _orientation)
     iOrientation=_orientation;
 }
 
+void Sensors::set_status(int _status)
+{
+    iStatus=_status;
+}
+
 int Sensors::get_CarNextMove()
 {
     return iCarNextMove;
@@ -71,6 +76,16 @@ int Sensors::get_Orientation()
 int Sensors::get_MaxSpeed()
 {
     return iMaxSpeed;
+}
+
+int Sensors::get_carType()
+{
+    return iCarType;
+}
+
+int Sensors::get_status()
+{
+    return iStatus;
 }
 
 Position Sensors::get_CarPosition()

@@ -1,6 +1,6 @@
 #include "car.h"
 
-const int speedValue=1;
+
 
 
 Car::Car(): QObject(), QGraphicsPixmapItem()
@@ -56,6 +56,8 @@ void Car::move_forward()
 
 void Car::move()
 {
+    if (iSpeed==0)
+        istuckCounter++;
    switch (iHowDrive) {
 
     case 1:
@@ -64,6 +66,7 @@ void Car::move()
        if (iSpeed>iMaxSpeed)
            slow_down();
         move_forward();
+
         break;
     case 2:
         turn();
@@ -75,9 +78,26 @@ void Car::move()
    case 4:
        stop();
        break;
+
+
     }
 
 
+
+}
+
+void Car::damage_car()
+{
+
+}
+
+void Car::turn_back()
+{
+
+}
+
+void Car::change_tow_occupation()
+{
 
 }
 
@@ -380,6 +400,32 @@ int Car::get_maxdistance()
 int Car::get_actualspeed()
 {
     return iSpeed*speedValue;
+}
+
+int Car::get_status()
+{
+    return iStatus;
+}
+
+int Car::get_type()
+{
+    return iType;
+}
+
+int Car::get_stuck_counter()
+{
+    return istuckCounter;
+}
+
+void Car::reset_stuck_counter()
+{
+    istuckCounter=0;
+
+}
+
+int Car::get_position_onLane()
+{
+    return iOnWrongLane;
 }
 
 

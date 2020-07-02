@@ -19,14 +19,14 @@ Simulation::Simulation(QGraphicsScene *_Scene,QGraphicsView *View)
         MoveTimer->setInterval(40/iSimSpeed);
         MoveTimer->start();
 
-//         AddTimer = new QTimer(this);
-//         connect(AddTimer,SIGNAL(timeout()),this,SLOT(add_car()));
-//         AddTimer->setInterval(iSpwnTime);
-//         AddTimer->start();
-//         TrafficLightTimer = new QTimer(this);
-//         connect(TrafficLightTimer,SIGNAL(timeout()),this,SLOT(change_trafficlights()));
-//         TrafficLightTimer->setInterval(iChangeLights);
-//         TrafficLightTimer->start();
+         AddTimer = new QTimer(this);
+         connect(AddTimer,SIGNAL(timeout()),this,SLOT(add_car()));
+         AddTimer->setInterval(iSpwnTime);
+         AddTimer->start();
+         TrafficLightTimer = new QTimer(this);
+         connect(TrafficLightTimer,SIGNAL(timeout()),this,SLOT(change_trafficlights()));
+         TrafficLightTimer->setInterval(iChangeLights);
+         TrafficLightTimer->start();
          CheckPropertiesTimer = new QTimer(this);
          connect(CheckPropertiesTimer,SIGNAL(timeout()),this,SLOT(check_properties()));
          CheckPropertiesTimer->start(40);
@@ -109,6 +109,7 @@ void Simulation::check_buttons()
     if(tmpStop!=bStop)
     {
         bStop=tmpStop;
+        iDamagedCarsNumber=0;
         stop_simulation();
     }
     if(tmpExit!=bExit)
@@ -191,10 +192,7 @@ void Simulation::check_checkboxes()
 
 }
 
-void Simulation::close_all()
-{
-    delete this;
-}
+
 
 void Simulation::stop_simulation()
 {
@@ -217,23 +215,121 @@ void Simulation::delete_all_cars()
     }
 }
 
+void Simulation::damage_some_cars()
+{
+    int DamagedCarID=-1;
+    int TowDriverID;
+    if(bDamage)
+    {
+        if(iCounter>2000)
+        {
+            if(iDamagedCarsNumber<2)
+            {
+                int randomNumber = (rand()&100);
+
+                if(randomNumber>100-iPrecentageToDamage)
+                {
+                    for (size_t it =0 ;it <vCarVector.size();it++)
+                    {
+                        if(iDamagedCarsNumber<2)
+                        {
+
+                            if (vCarVector[it]->can_be_damaged()&&vCarVector[it]->get_roadID()!=iLastRoadDamaged && iCounter>2000)
+                            {
+
+                                vCarVector[it]->engine_malfunction();
+                                iDamagedCarsNumber++;
+                                TowDriverID=iDriversIDs;
+                                vCarVector[it]->set_TowCarID(TowDriverID);
+                                iDriversIDs++;
+                                iLastRoadDamaged=vCarVector[it]->get_roadID();
+                                iCounter=0;
+                                DamagedCarID=vCarVector[it]->get_DriverID();
+
+
+                            }
+                        }
+                    }
+                    if(DamagedCarID!=-1)
+                    {
+
+                    int _startIndex = rand()%8;
+
+                    int _maxSpeed=rand()%iMaxCarSpeed+1;
+                    if(_startIndex==iLastRoadDamaged)
+                    {
+                        int randomNumber=(rand()%2)+1;
+                        if(randomNumber==1)
+                        { _startIndex--;
+                            if(_startIndex==-1)
+                                _startIndex=7;
+                        }
+                        else {
+                            _startIndex++;
+                            if(_startIndex==8)
+                                _startIndex=0;
+                        }
+                    }
+                    int _orientation=prepare_car_to_add(_startIndex);
+                    vCarVector.push_back(new TugDriver(_orientation,_maxSpeed,*MainScene,_startIndex,TowDriverID,*mMainMap,DamagedCarID,iLastRoadDamaged));
+
+                            DamagedCarID=-1;
+                    }
+                }
+
+            }
+
+        }
+        else
+            iCounter++;
+    }
+}
+
+
+void Simulation::delete_picked_cars()
+{
+
+
+    for (size_t it =0 ;it <vCarVector.size();it++)
+    {
+        if(vCarVector[it]->get_picked())
+        {
+           Driver *DriverToDelete=vCarVector.at(it);
+
+        delete DriverToDelete;
+        vCarVector.erase(vCarVector.begin()+it);
+        it--;
+        iDamagedCarsNumber--;
+
+        }
+    }
+
+}
+
 void Simulation::random_parameters(int &_maxSpeed,int &_startIndex)
 {
     _startIndex=rand()%8;
     _maxSpeed=rand()%iMaxCarSpeed+1;
-//    _startIndex=7;
-//    _maxSpeed=5;
 
-//    if(Driver::iCarnumber==1)
-//    {
-//        _startIndex=5;
-//        _maxSpeed=3;
-//    }
-//    if(Driver::iCarnumber==2)
-//    {
-//        _startIndex=0;
-//        _maxSpeed=3;
-//    }
+    if(_startIndex==iLastRoadSpawn)
+    {
+        int randomNumber=(rand()%2)+1;
+        if(randomNumber==1)
+        { _startIndex--;
+            if(_startIndex==-1)
+                _startIndex=7;
+        }
+        else {
+            _startIndex++;
+            if(_startIndex==8)
+                _startIndex=0;
+        }
+
+    }
+
+    iLastRoadSpawn=_startIndex;
+
+
 
 }
 
@@ -242,11 +338,29 @@ void Simulation::changeTimer(QTimer *_timerToChange, int _interval)
     _timerToChange->setInterval(_interval);
 }
 
+void Simulation::check_stuck_cars()
+{
+    for(size_t it =0 ;it<vCarVector.size();it++)
+    {
+        if((*vCarVector[it]).check_if_stuck())
+        {
+           Driver *DriverToDelete=vCarVector.at(it);
+
+        delete DriverToDelete;
+        vCarVector.erase(vCarVector.begin()+it);
+        it--;
+
+
+        }
+    }
+}
+
 void Simulation::add_car()
 {
     if(bStart)
     {
         int randomCarNumber;
+
     if(Driver::iCarnumber<iMaxCarNumber)
     {
     int _startIndex,_maxSpeed;
@@ -257,7 +371,7 @@ void Simulation::add_car()
     {
 
         randomCarNumber = rand()%100+1;
-         qDebug()<<randomCarNumber;
+
          if (randomCarNumber>(100-iPrecentageToAmbulance))
          vCarVector.push_back(new PriorityDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
          else
@@ -265,7 +379,8 @@ void Simulation::add_car()
     }
     else
     {
-        vCarVector.push_back(new TugDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
+       vCarVector.push_back(new NormalDriver(_orientation,_maxSpeed,*MainScene,_startIndex,iDriversIDs,*mMainMap));
+
     }
 
 
@@ -283,7 +398,11 @@ void Simulation::move_cars()
         {
             it->next_move();
         }
+        damage_some_cars();
+        delete_picked_cars();
         deleteCars();
+        check_stuck_cars();
+
     }
 
 
@@ -307,7 +426,4 @@ void Simulation::check_properties()
     check_checkboxes();
 }
 
-void Simulation::close_simulation()
-{
 
-}

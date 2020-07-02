@@ -27,19 +27,23 @@ public:
     int check_if_stop_on_lights(Position _position,int _orientation,int _roadID);
     int check_light_status(int _orientation,int _roadID);
     bool check_if_can_cross();
-
+    bool check_if_can_overtake(int _carID, int &_brokenCarID);
+    bool check_if_can_return(int _carID, int _brokenCarID);
+    bool check_if_can_turn_back(int _carID);
+    bool check_if_exit(int _roadID,int _orientation);
     void addCarSensor(Sensors * _sensorToAdd);
     void deleteCarSensor(int _carID);
-    void checkSensors();
-    int distance_to_next_car(int _carID);
-    int get_next_car_speed(int _carID);
-    int find_Next_Car(int _carID);
 
+    int distance_to_next_car(int _carID, int _lane);
+    int get_next_car_speed(int _carID);
+    int find_Next_Car(int _carID, int _sndMinDistance, int _sndMaxDistance);
+    bool check_if_close_to_target(int _carID, int _targetCarID);
 
 
     bool check_if_can_drive(int _carID);
     bool check_if_stuck(int _carID);
     int get_next_orientation(int _way,int _orientation);
+
 
 
 
@@ -55,7 +59,7 @@ private:
     int check_roadID_condition(int _roadID, int _orientation);
     std::vector<CrossRoad>::iterator  find_crossroad(int _roadID,int _orientation);
     bool check_if_X_Y(int _roadID);
-    bool check_if_exit(int _roadID,int _orientation);
+
 
     std::vector<TrafficLight*> vTrafficLVector;
     void load_trafficlight(Position _position,int _startStatus,int _orientation,int _roadID,int _stopPoint);
@@ -67,7 +71,7 @@ private:
     std::vector<Sensors*> vAllCarSensor;
     Sensors *find_Car_Sensor(int _carID);
 
-    //int distance_to_next_car(int _carID);
+
     void check_distance_between(Sensors *_fstSensor,Sensors* _sndSensor,int &_Xdiff,int &_Ydiff);
     int get_trafficLight_position(int _nextRoadID, int _orientation);
     void find_car_on_next_road(int _carID, int _nextRoadID, int &_min, int &_minID, int _orienDiff);

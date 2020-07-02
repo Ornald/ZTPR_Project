@@ -35,6 +35,11 @@ private:
     int iMaxCarSpeed=3;
     int iPrecentageToDamage=1;
     int iPrecentageToAmbulance=1;
+    int iNumberOfDamaged=0;
+    int iDamagedCarsNumber=0;
+    int iLastRoadDamaged=10;
+    int iLastRoadSpawn=10;
+    int iCounter=0;
 
     bool bStart=1;
     bool bStop=0;
@@ -44,26 +49,29 @@ private:
     bool bDamage=0;
 
     void changeTimer(QTimer *_timerToChange, int _interval);
-    public:
-    Simulation(QGraphicsScene *_Scene, QGraphicsView *View);
-    ~Simulation();
+    void check_stuck_cars();
     int prepare_car_to_add(int _startPosition);
     void deleteCars();
     void delay (int _milisecounds);
     void check_buttons();
     void check_sliders();
     void check_checkboxes();
-    void close_all();
+
     void stop_simulation();
     void delete_all_cars();
+    void damage_some_cars();
+
+    void delete_picked_cars();
+    public:
+    Simulation(QGraphicsScene *_Scene, QGraphicsView *View);
+    ~Simulation();
+
 private slots:
     void add_car();
     void move_cars();
     void change_trafficlights();
     void check_properties();
 
-public slots:
-    void close_simulation();
 
 };
 

@@ -12,7 +12,7 @@ public:
     ~TugCar();
 
 public slots:
-    void change_tow_occupation();
+    void change_tow_occupation() override;
 private:
     int iOccupation=0;
 };

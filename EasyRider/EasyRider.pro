@@ -25,7 +25,6 @@ SOURCES += \
     normaldriver.cpp \
     ownslider.cpp \
     position.cpp \
-    prioritycar.cpp \
     prioritydriver.cpp \
     sensors.cpp \
     simulation.cpp \
@@ -43,7 +42,6 @@ HEADERS += \
     normaldriver.h \
     ownslider.h \
     position.h \
-    prioritycar.h \
     prioritydriver.h \
     sensors.h \
     simulation.h \

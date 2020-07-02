@@ -23,6 +23,9 @@ public:
     void set_drive_way(int howdrive);
 
     virtual void move();
+    virtual void damage_car();
+    virtual  void turn_back();
+    virtual void change_tow_occupation();
     void turn_right();
     void turn_left();
     void change_lane();
@@ -32,10 +35,12 @@ public:
     int get_maxspeed();
     int get_maxdistance();
     int get_actualspeed();
-
-
-
-
+    int get_status();
+    int get_type();
+    int get_stuck_counter();
+    void reset_stuck_counter();
+    int get_position_onLane();
+    const static int speedValue=1;
 
 
 
@@ -55,8 +60,12 @@ protected:
     int iOnWrongLane=0;
     QRectF Rect;
     QPointF CenterPoint;
-
+    int iStatus=1;
+    int iType;
     void move_forward();
+    int istuckCounter=0;
+
+
     void turn();
     void turn_Parameters(int &RotationAngle,int &NextDirection,int &MoveX,int &MoveY);
     void change_lane_parameters(int &RotationAngle,int &NextDirection,int &MoveX,int &MoveY);

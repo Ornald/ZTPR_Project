@@ -24,6 +24,7 @@ Map::Map(QGraphicsScene & _scene)
     load_crossroad(11,180,(pTurnsPositions(2).get_Y()-adjustment),(pTurnsPositions(7).get_Y()-adjustment));
 
 
+
     load_trafficlight(Position(420,650),0,0,0,620);
     load_trafficlight(Position(420,540),2,270,8,430);
     load_trafficlight(Position(310,540),0,180,11,500);
@@ -303,6 +304,72 @@ int Map::check_light_status(int _orientation, int _roadID)
     return it->get_status();
 }
 
+bool Map::check_if_can_overtake(int _carID, int &_brokenCarID)
+{
+    Sensors *baseCar=find_Car_Sensor(_carID);
+    Position CurrentPosition = baseCar->get_CarPosition();
+    int orientation = baseCar->get_Orientation();
+    int roadID=baseCar->get_RoadID();
+    int lightDistance = check_if_stop_on_lights(CurrentPosition, orientation,roadID);
+
+    int nextCarID = find_Next_Car(_carID,0,5);
+    Sensors *nextCar = find_Car_Sensor(nextCarID);
+
+    if(nextCar->get_status()==0)
+    {
+        _brokenCarID = nextCar->get_CarID();
+        int distance = distance_to_next_car(_carID,1);
+        int brokenCarDistance = distance_to_next_car(nextCarID,0);
+
+        if ((distance>300 || distance==-1) && 80<abs(lightDistance))
+            if(brokenCarDistance>100 || brokenCarDistance==-1)
+            return 1;
+
+
+    }
+
+    return 0;
+}
+
+bool Map::check_if_can_return(int _carID, int _brokenCarID)
+{
+    Sensors *baseCar= find_Car_Sensor(_carID);
+    Sensors *brokenCar = find_Car_Sensor(_brokenCarID);
+    int X;
+    int Y;
+    check_distance_between(baseCar,brokenCar,X,Y);
+
+    bool x_or_y = check_if_X_Y(baseCar->get_RoadID());
+
+    if (x_or_y)
+    {
+        if (Y<-10)
+            return 1;
+    }
+    else
+    {
+        if(X<-10)
+            return 1;
+    }
+    return 0;
+
+}
+
+bool Map::check_if_can_turn_back(int _carID)
+{
+    Sensors *baseCar=find_Car_Sensor(_carID);
+    Position CurrentPosition = baseCar->get_CarPosition();
+    int orientation = baseCar->get_Orientation();
+    int roadID=baseCar->get_RoadID();
+    int lightDistance = check_if_stop_on_lights(CurrentPosition, orientation,roadID);
+
+    int distance = distance_to_next_car(_carID,1);
+
+    if((distance>200 || distance==-1) && 80<abs(lightDistance) && 280>abs(lightDistance) && !(check_if_exit(baseCar->get_RoadID(),baseCar->get_Orientation())))
+        return 1;
+    return 0;
+}
+
 
 TrafficLight* Map::find_trafficlight(int _roadID, int _orientation)
 {
@@ -330,7 +397,7 @@ TrafficLight* Map::find_trafficlight(int _roadID, int _orientation)
 
 }
 
-int Map::find_Next_Car(int _carID)
+int Map::find_Next_Car(int _carID, int _sndMinDistance, int _sndMaxDistance)
 {
     Sensors *baseCarSensor = find_Car_Sensor(_carID);
     bool x_or_y = check_if_X_Y(baseCarSensor->get_RoadID());
@@ -346,16 +413,16 @@ int Map::find_Next_Car(int _carID)
 
         if(x_or_y)
         {
-        if (Ydif>0 && Ydif<min && abs(Xdif)<5 && baseCarSensor->get_CarID()!=vAllCarSensor[it]->get_CarID())
-        {
-            min=Ydif;
-            minID = vAllCarSensor[it]->get_CarID();
+            if (Ydif>0 && Ydif<min && abs(Xdif)<_sndMaxDistance && abs(Xdif)>=_sndMinDistance && baseCarSensor->get_CarID()!=vAllCarSensor[it]->get_CarID())
+            {
+                min=Ydif;
+                minID = vAllCarSensor[it]->get_CarID();
 
-        }
+            }
         }
         else
         {
-            if (Xdif >0 && Xdif<min && abs(Ydif)<5 && baseCarSensor->get_CarID()!=vAllCarSensor[it]->get_CarID())
+            if (Xdif >0 && Xdif<min && abs(Ydif)<_sndMaxDistance && abs(Ydif)>=_sndMinDistance && baseCarSensor->get_CarID()!=vAllCarSensor[it]->get_CarID())
             {
                 min=Xdif;
                 minID = vAllCarSensor[it]->get_CarID();
@@ -382,10 +449,14 @@ Sensors *Map::find_Car_Sensor(int _carID)
 
 }
 
-int Map::distance_to_next_car(int _carID)
+int Map::distance_to_next_car(int _carID, int _lane)
 {
     Sensors *baseSensor= find_Car_Sensor(_carID);
-    int nextCarID = find_Next_Car(_carID);
+    int nextCarID;
+    if (_lane==0)
+    nextCarID = find_Next_Car(_carID,0,5);
+    else
+      nextCarID=find_Next_Car(_carID,20,40);
     if (-1==nextCarID)
         return -1;
 
@@ -410,7 +481,7 @@ int Map::distance_to_next_car(int _carID)
 
 int Map::get_next_car_speed(int _carID)
 {
-    int nextCarID = find_Next_Car(_carID);
+    int nextCarID = find_Next_Car(_carID,0,5);
     if(-1==nextCarID)
         return -1;
     Sensors *baseCarSensor = find_Car_Sensor(nextCarID);
@@ -516,6 +587,8 @@ int Map::get_next_orientation(int _way, int _orientation)
 
 
 
+
+
 bool Map::check_if_on_crossroad(Position _carPosition, int _xmin,int _xmax,int _ymin,int _ymax)
 {
 
@@ -537,28 +610,28 @@ void Map::get_crossroad_positions(int _ID, int &_xmin, int &_xmax, int &_ymin, i
 {
     switch (_ID) {
     case 0:
-        _xmin=320;
-        _xmax=420;
-        _ymin=510;
-        _ymax=610;
+        _xmin=330;
+        _xmax=410;
+        _ymin=520;
+        _ymax=600;
         break;
     case 1:
-        _xmin=760;
-        _xmax=860;
-        _ymin=510;
-        _ymax=610;
+        _xmin=770;
+        _xmax=850;
+        _ymin=520;
+        _ymax=600;
         break;
     case 2:
-        _xmin=760;
-        _xmax=860;
-        _ymin=170;
-        _ymax=270;
+        _xmin=770;
+        _xmax=850;
+        _ymin=180;
+        _ymax=260;
         break;
     case 3:
-        _xmin=320;
-        _xmax=420;
-        _ymin=170;
-        _ymax=270;
+        _xmin=330;
+        _xmax=410;
+        _ymin=180;
+        _ymax=260;
         break;
     }
 }
@@ -634,6 +707,32 @@ bool Map::check_if_crossroad_free(int _carID)
     return 1;
 }
 
+bool Map::check_if_close_to_target(int _carID, int _targetCarID)
+{
+    Sensors * baseCar= find_Car_Sensor(_carID);
+    Sensors *TargetCar = find_Car_Sensor(_targetCarID);
+    int X;
+    int Y;
+    bool x_or_y;
+    if(baseCar->get_RoadID()==TargetCar->get_RoadID())
+    {
+     check_distance_between(baseCar,TargetCar,X,Y);
+     x_or_y = check_if_X_Y(baseCar->get_RoadID());
+
+     if(x_or_y)
+     {
+         if(Y<10)
+             return 1;
+     }
+     else
+     {
+         if(X<10)
+             return 1;
+     }
+    }
+    return 0;
+}
+
 bool Map::check_if_can_drive(int _carID)
 {
     Sensors *baseCar=find_Car_Sensor(_carID);
@@ -645,7 +744,7 @@ bool Map::check_if_can_drive(int _carID)
     find_car_on_next_road(_carID,nextRoad,min,minID,180);
 
 
-   if (min>50 || -1==minID)
+   if ((min>50 || -1==minID) && check_if_crossroad_free(_carID))
    {
 
        if((baseCar->get_CarNextMove()==2 && check_if_crossroad_free(_carID)))
@@ -679,6 +778,11 @@ bool Map::check_if_can_drive(int _carID)
             }
 
         }
+        if(nextCar->get_carType()==1 && baseCar->get_carType()==0)
+            return 0;
+        if(nextCar->get_carType()==0 && baseCar->get_carType()==1)
+            return 1;
+
         if(nextCar->get_CarNextMove()==0 && (baseCar->get_CarNextMove()==1 || baseCar->get_CarNextMove()==0) && min<50)
         {
             return 1;
@@ -808,14 +912,7 @@ void Map::deleteCarSensor(int _carID)
     }
 }
 
-void Map::checkSensors()
-{
-    for(size_t it=0;it<vAllCarSensor.size();it++)
-    {
-        qDebug()<<vAllCarSensor[it]->get_CarPosition().get_X()<<vAllCarSensor[it]->get_CarPosition().get_Y();
-    }
-    qDebug()<<endl;
-}
+
 
 
 int Map::check_roadID_condition(int _roadID, int _orientation)

@@ -9,5 +9,6 @@
         <file>GreenLight.png</file>
         <file>RedLight.png</file>
         <file>YellowLight.png</file>
+        <file>carTowWithcar.png</file>
     </qresource>
 </RCC>

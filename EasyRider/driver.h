@@ -26,23 +26,38 @@ protected:
     int iCurrentMaxSpeed=0;
     Map *DriverMap;
     Position pCurrentPosition;
+    bool bStuck=0;
     void set_current_position();
     void check_crossroad_position(int _diffPosition);
-    void check_trafficlights(int _difference, int _lightStatus);
+    virtual void check_trafficlights(int _difference, int _lightStatus);
     void adjust_speed(int _diff);
+    virtual void find_way();
+    int iLane=0;
+    int iNextBrokenCarID=-1;
+    int iPicked=0;
+    int iTowCarID=-1;
+    void set_picked();
 
 public:
     Driver();
     virtual ~Driver();
-    void check_right_of_way();
-    void check_right_to_overtake();
-    void find_way();
-    void next_move();
+
+     void overtake();
+    bool check_if_stuck();
+
+    virtual void next_move();
     Position start_postion();
     void set_start_index(int _startIndex);
     int get_start_index();
     bool check_if_out_board();
+    int get_roadID();
+    int get_DriverID();
+    void set_TowCarID(int _towCarID);
+    int get_picked();
     static int iCarnumber;
+   virtual bool can_be_damaged();
+    virtual void engine_malfunction();
+    virtual int picked_up_id();
 
 
 
