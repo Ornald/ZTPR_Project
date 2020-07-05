@@ -318,8 +318,8 @@ bool Map::check_if_can_overtake(int _carID, int &_brokenCarID)
     if(nextCar->get_status()==0)
     {
         _brokenCarID = nextCar->get_CarID();
-        int distance = distance_to_next_car(_carID,1);
-        int brokenCarDistance = distance_to_next_car(nextCarID,0);
+        int distance = distance_to_next_car<int>(_carID,1);
+        int brokenCarDistance = distance_to_next_car<int>(nextCarID,0);
 
         if ((distance>300 || distance==-1) && 80<abs(lightDistance))
             if(brokenCarDistance>100 || brokenCarDistance==-1)
@@ -363,7 +363,7 @@ bool Map::check_if_can_turn_back(int _carID)
     int roadID=baseCar->get_RoadID();
     int lightDistance = check_if_stop_on_lights(CurrentPosition, orientation,roadID);
 
-    int distance = distance_to_next_car(_carID,1);
+    int distance = distance_to_next_car<int>(_carID,1);
 
     if((distance>200 || distance==-1) && 80<abs(lightDistance) && 280>abs(lightDistance) && !(check_if_exit(baseCar->get_RoadID(),baseCar->get_Orientation())))
         return 1;
@@ -449,35 +449,6 @@ Sensors *Map::find_Car_Sensor(int _carID)
 
 }
 
-int Map::distance_to_next_car(int _carID, int _lane)
-{
-    Sensors *baseSensor= find_Car_Sensor(_carID);
-    int nextCarID;
-    if (_lane==0)
-    nextCarID = find_Next_Car(_carID,0,5);
-    else
-      nextCarID=find_Next_Car(_carID,20,40);
-    if (-1==nextCarID)
-        return -1;
-
-    Sensors* NextCarSensor=find_Car_Sensor(nextCarID);
-   bool x_or_y = check_if_X_Y(baseSensor->get_RoadID());
-   int Xdis;
-   int Ydis;
-
-    check_distance_between(baseSensor,NextCarSensor,Xdis,Ydis);
-   if(x_or_y)
-   {
-       return Ydis;
-   }
-   else
-   {
-       return Xdis;
-   }
-
-
-   return -1;
-}
 
 int Map::get_next_car_speed(int _carID)
 {

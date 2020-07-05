@@ -12,10 +12,12 @@ TugDriver::TugDriver(int _orientation, int _maxspeed,QGraphicsScene& _scene,int 
     DriverCar=new TugCar(_orientation,_maxspeed,_startPosition);
     _scene.addItem(DriverCar);
     set_current_position();
+    iCarType=0;
     sCarSensor=new Sensors(pCurrentPosition,iWayTable[iCrossRoadCnt],iRoadID,DriverCar->get_actualspeed(),iDriverID,DriverCar->rotation(),iCarType,iTotalMaxSpeed);
     DriverMap->addCarSensor(sCarSensor);
     iTargetID=_targetID;
     iTargetRoadID=_targetRoadID;
+
     find_way();
 
 }

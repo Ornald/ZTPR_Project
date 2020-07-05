@@ -131,7 +131,7 @@ void Driver::check_trafficlights(int _difference, int _lightStatus)
 
 void Driver::adjust_speed(int _diff)
 {
-    int distance =DriverMap->distance_to_next_car(iDriverID,0);
+    int distance =DriverMap->distance_to_next_car<int>(iDriverID,0);
 
 
     if (DriverCar->get_position_onLane()==1)

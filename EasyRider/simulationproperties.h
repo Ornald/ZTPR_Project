@@ -12,12 +12,25 @@
 #include <QGraphicsView>
 #include "ownslider.h"
 
-
+/**
+  * \class SimulationProperties
+ * \brief Klasa dodająca do planszy przyciski, suwaki i checkboxy
+ */
 class SimulationProperties :public QWidget
 {
     Q_OBJECT
 public:
+    /**
+     * \brief Konstruktor klasy
+     *
+     * W konstruktorze inicjowane są wszystkie widgety oraz łączone są sygnały z nich ze zdefiniowanymi niżej slotami.
+     */
     SimulationProperties(QGraphicsView *MainView);
+    /**
+     * \brief Destruktor klasy
+     *
+     * Usuwa wszystkie stworzone widgety.
+     */
     ~SimulationProperties();
     int get_simSpeed();
     int get_spwnTime();
@@ -93,10 +106,26 @@ private:
     QGridLayout *Layout;
 
 
-
+    /**
+     * \brief Funkcja dodająca do planszy Slidery
+     *
+     * Do każdego slidera dodawane są również 2 pola tekstowa, w których podane są wartości minimalne i maksmylane z sliderów.
+     * Ustawione są również wartość pojedyńczego skoku i pozycje w Layoucie.
+     */
     void add_sliders(OwnSlider *_sliderToAdd, int _row, int _column, int _min, int _max, int _step, QString _title,QLabel *_titleLabel,QLabel *_minLabel,QLabel *_maxLabel);
+    /**
+     * \brief Funkcja ustawia parametry slidera
+     *
+     * W sliderze ustawiana jest wartość minimalna, maksymalna i pojedyńczy skok.
+     */
     void setSlider(OwnSlider *_slider, int _min,int _max, int _step);
+    /**
+     * \brief Funkcja dodaje do planszy przyciski
+     */
     void add_buttons(QPushButton *_fstBtn, QPushButton *_sndBtn, int _row, int _column);
+    /**
+     * \brief Funkcja dodaje do planszy checkboxy
+     */
     void add_checkBoxes(QCheckBox *_checkBoxToAdd, int _row, int _column);
 
     int iSimSpeed=1;

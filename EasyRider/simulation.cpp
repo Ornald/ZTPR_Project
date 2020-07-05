@@ -41,6 +41,7 @@ Simulation::~Simulation()
     delete AddTimer;
     delete CheckPropertiesTimer;
     delete TrafficLightTimer;
+    delete MainScene;
 }
 
 int Simulation::prepare_car_to_add(int _startPosition)
@@ -117,7 +118,10 @@ void Simulation::check_buttons()
         bExit=tmpExit;
         bStop=1;
 
+
         qApp->quit();
+
+
     }
 
 
