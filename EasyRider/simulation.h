@@ -178,7 +178,14 @@ private slots:
      * Timer sprawdza czy zmieniły się wartości symulacji.
      */
     void check_properties();
-
+    /**
+     * \brief Funkcja do niszczenia 2 samochodów
+     *
+     * Funkcja niszczy 2 samochody. Przy czym nie mogą to być karetki ani holowniki, ponieważ nie mają one odpowiednich metod.
+     * A to za długo by trwało w czasie obrony. Zepsucie tym sposobem nie powoduje pojawienie się holownika,
+     * ponieważ holownik nie znalazłby celu gdy samochód psuje się w nieprzewidziaym wcześniej miejscu.
+     * Inne samochody będa dalej wymijać uszkodzone samochody, gdy to będzie możliwe.
+     */
     void damage_two_cars();
 
 };
