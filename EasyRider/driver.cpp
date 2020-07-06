@@ -286,6 +286,16 @@ int Driver::picked_up_id()
     return -1;
 }
 
+int Driver::get_carType()
+{
+    return iCarType;
+}
+
+bool Driver::get_status()
+{
+    return bStatus;
+}
+
 
 void Driver::next_move()
 {

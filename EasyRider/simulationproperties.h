@@ -39,6 +39,8 @@ public:
     int get_maxSpeed();
     int get_precToDam();
     int get_precToAmb();
+    bool get_destroy();
+    void set_destroyed(bool _damaged);
     bool get_start();
     bool get_stop();
     bool get_exit();
@@ -59,6 +61,7 @@ private slots:
     void press_exit();
     void checked_ambulance();
     void checked_destroyed();
+    void destroy_two_cars();
 
 private:
     OwnSlider* SimulationSpeed;
@@ -97,6 +100,7 @@ private:
     QPushButton* StopBtn;
     QPushButton* PauseBtn;
     QPushButton *ExitBtn;
+    QPushButton *DamageBtn;
 
     QCheckBox* TurnDamage;
     QCheckBox* TurnAmbulance;
@@ -123,6 +127,7 @@ private:
      * \brief Funkcja dodaje do planszy przyciski
      */
     void add_buttons(QPushButton *_fstBtn, QPushButton *_sndBtn, int _row, int _column);
+    void add_one_button(QPushButton *_Btn, int _row, int _column);
     /**
      * \brief Funkcja dodaje do planszy checkboxy
      */
@@ -139,6 +144,8 @@ private:
     bool bStart=1;
     bool bStop=0;
     bool bExit=0;
+    bool bDamaged=0;
+    bool bDestroy=0;
 
     bool bAmbulance=0;
     bool bDamage=0;

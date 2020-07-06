@@ -10,6 +10,7 @@
 #include "tugdriver.h"
 #include "simulationproperties.h"
 #include <QGraphicsView>
+#include <QKeyEvent>
 
 /**
  * \class Simulation
@@ -51,6 +52,7 @@ private:
     bool bStart=1;
     bool bStop=0;
     bool bExit=0;
+    bool bDestory=0;
 
     bool bAmbulance=0;
     bool bDamage=0;
@@ -177,6 +179,7 @@ private slots:
      */
     void check_properties();
 
+    void damage_two_cars();
 
 };
 

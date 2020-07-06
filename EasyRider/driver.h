@@ -38,6 +38,7 @@ protected:
     int iNextBrokenCarID=-1;
     int iPicked=0;
     int iTowCarID=-1;
+    bool bStatus=1;
 
     /**
      * \brief Funkcja odczytuje pozycje grafiki samochodu
@@ -182,7 +183,8 @@ public:
      */
     virtual int picked_up_id();
 
-
+    int get_carType();
+    bool get_status();
 
 
 

@@ -65,8 +65,9 @@ void NormalDriver::next_move()
 void NormalDriver::engine_malfunction()
 {
     iTotalMaxSpeed=0;
+    bStatus=0;
     sCarSensor->set_status(0);
-    DriverCar->damage_car();
+    //DriverCar->damage_car();
 
 
 }

@@ -102,6 +102,7 @@ void Simulation::check_buttons()
     bool tmpStart=Properties->get_start();
     bool tmpStop=Properties->get_stop();
     bool tmpExit = Properties->get_exit();
+    bool tmpDestory = Properties->get_destroy();
 
     if(tmpStart!=bStart)
     {
@@ -122,6 +123,13 @@ void Simulation::check_buttons()
         qApp->quit();
 
 
+    }
+    if( bDestory!=tmpDestory)
+    {
+
+        Properties->set_destroyed(0);
+
+        damage_two_cars();
     }
 
 
@@ -429,5 +437,33 @@ void Simulation::check_properties()
     check_buttons();
     check_checkboxes();
 }
+
+
+
+void Simulation::damage_two_cars()
+{
+ int iCarDestroyed=0;
+ if(vCarVector.size()>2)
+ {
+    while(iCarDestroyed<2)
+    {
+    int randomCar=rand()%vCarVector.size();
+
+
+    if(vCarVector[randomCar]->get_carType()==0 && vCarVector[randomCar]->get_status()==1)
+    {
+       vCarVector[randomCar]->engine_malfunction();
+        iCarDestroyed++;
+
+    }
+
+
+    }
+ }
+
+
+}
+
+
 
 

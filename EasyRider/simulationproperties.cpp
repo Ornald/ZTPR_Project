@@ -19,21 +19,22 @@ SimulationProperties::SimulationProperties(QGraphicsView *MainView)
     StopBtn = new QPushButton("Stop");
     PauseBtn = new QPushButton("Pauza");
     ExitBtn = new QPushButton("Zamknij");
+    DamageBtn = new QPushButton("Uszkodz samochody");
 
     TurnDamage = new QCheckBox("Wlacz niszczenie samochodow");
     TurnAmbulance= new QCheckBox("Wlacz karetki");
-
-    add_buttons(StartBtn,StopBtn,0,0);
-    add_buttons(PauseBtn,ExitBtn,1,0);
-    add_checkBoxes(TurnDamage,2,0);
-    add_checkBoxes(TurnAmbulance,3,0);
-    add_sliders(SimulationSpeed,5,0,1,4,1,"Predkosc Symulacji",SimSpeedTitle,SimSpeedMin,SimSpeedMax);
-    add_sliders(SpawnTime,7,0,1000,5000,200,"Czas do nowego samochodu [ms]",SpwTimTitle,SpwTimeMin,SpwTimeMax);
-    add_sliders(ChangeLightsTime,9,0,8000,16000,400,"Czas na zmiane swiatel [ms]",ChngLigTimTitle,ChngLigTimMin,ChngLigTimMax);
-    add_sliders(MaxCarsNumber,11,0,5,20,1,"Maksymalna ilosc samochodow",MaxCarNumberTitle,MaxCarNumberMin,MaxCarNumberMax);
-    add_sliders(MaxCarsSpeed,13,0,1,5,1,"Maksymalna predkosc samochodu",MaxCarSpeedTitle,MaxCarSpeedMin,MaxCarSpeedMax);
-    add_sliders(PrecentageToDamage,15,0,1,10,1,"% szansa na zepsucie samochodu",PrecentageToDamageTitle,PrecentageToDamageMin,PrecentageToDamageMax);
-    add_sliders(PrecentageToAmbulance,17,0,1,10,1,"% szansa na pojawienie sie karetki",PrecentageToAmbulanceTitle,PrecentageToAmbulanceMin,PrecentageToAmbulanceMax);
+    add_one_button(DamageBtn,0,0);
+    add_buttons(StartBtn,StopBtn,1,0);
+    add_buttons(PauseBtn,ExitBtn,2,0);
+    add_checkBoxes(TurnDamage,3,0);
+    add_checkBoxes(TurnAmbulance,4,0);
+    add_sliders(SimulationSpeed,6,0,1,4,1,"Predkosc Symulacji",SimSpeedTitle,SimSpeedMin,SimSpeedMax);
+    add_sliders(SpawnTime,8,0,1000,5000,200,"Czas do nowego samochodu [ms]",SpwTimTitle,SpwTimeMin,SpwTimeMax);
+    add_sliders(ChangeLightsTime,10,0,8000,16000,400,"Czas na zmiane swiatel [ms]",ChngLigTimTitle,ChngLigTimMin,ChngLigTimMax);
+    add_sliders(MaxCarsNumber,12,0,5,20,1,"Maksymalna ilosc samochodow",MaxCarNumberTitle,MaxCarNumberMin,MaxCarNumberMax);
+    add_sliders(MaxCarsSpeed,14,0,1,5,1,"Maksymalna predkosc samochodu",MaxCarSpeedTitle,MaxCarSpeedMin,MaxCarSpeedMax);
+    add_sliders(PrecentageToDamage,16,0,1,10,1,"% szansa na zepsucie samochodu",PrecentageToDamageTitle,PrecentageToDamageMin,PrecentageToDamageMax);
+    add_sliders(PrecentageToAmbulance,18,0,1,10,1,"% szansa na pojawienie sie karetki",PrecentageToAmbulanceTitle,PrecentageToAmbulanceMin,PrecentageToAmbulanceMax);
 
     ChangeLightsTime->setValue(iChangeLights);
     SpawnTime->setValue(iSpwnTime);
@@ -50,6 +51,7 @@ SimulationProperties::SimulationProperties(QGraphicsView *MainView)
     connect(StopBtn,SIGNAL(clicked()),this,SLOT(press_stop()));
     connect(PauseBtn,SIGNAL(clicked()),this,SLOT(press_pause()));
     connect(ExitBtn,SIGNAL(clicked()),this,SLOT(press_exit()));
+    connect(DamageBtn,SIGNAL(clicked()),this,SLOT(destroy_two_cars()));
 
 
     connect(TurnAmbulance,&QCheckBox::stateChanged,this,&SimulationProperties::checked_ambulance);
@@ -131,6 +133,16 @@ int SimulationProperties::get_precToDam()
 int SimulationProperties::get_precToAmb()
 {
     return iPrecentageToAmbulance;
+}
+
+bool SimulationProperties::get_destroy()
+{
+    return bDestroy;
+}
+
+void SimulationProperties::set_destroyed(bool _damaged)
+{
+    bDestroy=_damaged;
 }
 
 bool SimulationProperties::get_start()
@@ -237,6 +249,11 @@ void SimulationProperties::checked_destroyed()
         bDamage=0;
 }
 
+void SimulationProperties::destroy_two_cars()
+{
+    bDestroy=1;
+}
+
 void SimulationProperties::add_sliders(OwnSlider *_sliderToAdd, int _row, int _column, int _min, int _max, int _step,QString _title,QLabel *_titleLabel,QLabel *_minLabel,QLabel *_maxLabel)
 {
     setSlider(_sliderToAdd,_min,_max,_step);
@@ -267,6 +284,13 @@ void SimulationProperties::add_buttons(QPushButton *_fstBtn, QPushButton* _sndBt
     HLayout->addWidget(_fstBtn);
     HLayout->addWidget(_sndBtn);
     Layout->addLayout(HLayout,_row,_column);
+}
+
+void SimulationProperties::add_one_button(QPushButton *_Btn, int _row, int _column)
+{
+     QHBoxLayout *HLayout = new QHBoxLayout();
+     HLayout->addWidget(_Btn);
+     Layout->addLayout(HLayout,_row,_column);
 }
 
 void SimulationProperties::add_checkBoxes(QCheckBox *_checkBoxToAdd,int _row,int _column)
